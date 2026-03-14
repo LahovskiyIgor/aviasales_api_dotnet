@@ -1,47 +1,34 @@
 ```
-# Build artifacts
-bin/
-obj/
-*.dll
-*.exe
-*.pdb
-*.config
-
 # Dependencies
-packages/
 node_modules/
 
-# Logs
-*.log
+# Build outputs
+dist/
+build/
+coverage/
+htmlcov/
 
-# Environment
+# Environment variables
 .env
 .env.local
-*.env.*
+.env.*
 
-# Editors
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Test coverage
-coverage/
-htmlcov/
-*.coverage
-
-# Compiled Python (if any Python files present)
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
+# Logs
+*.log
+
+# Coverage
+.coverage
 ```
