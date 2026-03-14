@@ -38,7 +38,6 @@ namespace AirlineAPI.Controllers
             else return Ok(entity);
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetFlightDetails(int id)
         {

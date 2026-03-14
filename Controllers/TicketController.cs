@@ -42,6 +42,36 @@ namespace AirlineAPI.Controllers
             else return Ok(entity);
         }
 
+        /// <summary>
+        /// Получить билет по ID. Доступно администратору или владельцу билета.
+        /// </summary>
+        [Authorize]
+        [HttpGet("my/{id}")]
+        public async Task<ActionResult<Ticket>> GetMyTicketById(int id)
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var ticket = await _service.GetByPassengerAndIdAsync(id, passengerId);
+            
+            if (ticket == null)
+                return NotFound(new { message = "Билет не найден или не принадлежит вам" });
+            
+            return Ok(ticket);
+        }
+
+        /// <summary>
+        /// Получить все билеты текущего пользователя.
+        /// </summary>
+        [Authorize]
+        [HttpGet("my")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetMyTickets()
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var allTickets = await _service.GetAllAsync();
+            var myTickets = allTickets.Where(t => t.PassengerId == passengerId);
+            
+            return Ok(myTickets);
+        }
+
         [Authorize(Roles = "Admin,User")]
         [HttpPost("reserve")]
         public async Task<IActionResult> ReserveTicket([FromBody] ReserveTicketRequest request)

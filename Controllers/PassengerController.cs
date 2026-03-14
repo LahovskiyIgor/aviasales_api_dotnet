@@ -40,6 +40,38 @@ namespace AirlineAPI.Controllers
             else return Ok(entity);
         }
 
+        /// <summary>
+        /// Получить данные текущего пользователя.
+        /// </summary>
+        [Authorize]
+        [HttpGet("my")]
+        public async Task<ActionResult<Passenger>> GetMyProfile()
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var passenger = await _service.GetByIdAsync(passengerId);
+            
+            if (passenger == null)
+                return NotFound(new { message = "Профиль не найден" });
+            
+            return Ok(passenger);
+        }
+
+        /// <summary>
+        /// Обновить данные текущего пользователя.
+        /// </summary>
+        [Authorize]
+        [HttpPut("my")]
+        public async Task<IActionResult> UpdateMyProfile([FromBody] Passenger passenger)
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            
+            if (passenger.Id != passengerId) 
+                return BadRequest(new { message = "Нельзя обновить профиль другого пользователя" });
+            
+            await _service.UpdateAsync(passenger);
+            return NoContent();
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetPassengerWithTicketsAndFlights(int id)
