@@ -32,7 +32,7 @@ namespace AirlineAPI.Services
                 return false;
 
             // Проверяем допустимые статусы
-            var validStatuses = new[] { "Забронирован", "Зарезервирован", "Оплачен", "Отменен" };
+            var validStatuses = new[] { "Зарезервирован", "Оплачен", "Отменен" };
             if (!validStatuses.Contains(status))
                 return false;
 
@@ -68,7 +68,7 @@ namespace AirlineAPI.Services
             var seatTaken = existingTickets.Any(t => 
                 t.FlightId == flightId && 
                 t.SeatNumber == seatNumber && 
-                t.BookingStatus is "Забронирован" or "Зарезервирован" or "Оплачен");
+                t.BookingStatus is "Зарезервирован" or "Оплачен");
             
             if (seatTaken)
                 throw new InvalidOperationException("Место уже занято");
