@@ -9,6 +9,7 @@ using System.Text;
 using AirlineAPI.Data;
 using System.Text.Json.Serialization;
 using AirlineAPI.BackgroundServices;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,9 +46,42 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddHostedService<ReservationCleanupService>();
 
 
-// Добавление Swagger
+// Добавление Swagger с поддержкой JWT
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo 
+    { 
+        Title = "Airline API", 
+        Version = "v1",
+        Description = "API для управления авиакомпанией с поддержкой JWT-аутентификации"
+    });
+
+    // Добавление схемы безопасности JWT
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddAuthentication(options =>
 {
