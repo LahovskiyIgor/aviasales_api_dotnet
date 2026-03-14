@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AirlineAPI.Data;
 using System.Text.Json.Serialization;
+using AirlineAPI.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IPassengerService, PassengerService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<AuthService>();
+
+// –егистраци€ фонового сервиса очистки просроченных резервирований
+builder.Services.AddHostedService<ReservationCleanupService>();
 
 
 // ƒобавление Swagger

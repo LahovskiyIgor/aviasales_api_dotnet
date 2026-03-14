@@ -17,6 +17,10 @@ namespace AirlineAPI.Services
 
         Task<bool> UpdateStatusAsync(int ticketId, string status, int passengerId);
         Task<Ticket> GetByPassengerAndIdAsync(int ticketId, int passengerId);
+        
+        Task<Ticket> ReserveTicketAsync(int flightId, int passengerId, string seatNumber);
+        Task<bool> CancelReservationAsync(int ticketId, int passengerId);
+        Task CancelExpiredReservationsAsync();
     }
 
 }
