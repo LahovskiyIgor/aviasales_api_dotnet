@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AirlineAPI.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
     public class TicketController : ControllerBase
@@ -41,6 +40,46 @@ namespace AirlineAPI.Controllers
             if (entity == null)
                 return NotFound();
             else return Ok(entity);
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        [HttpPost("reserve")]
+        public async Task<IActionResult> ReserveTicket([FromBody] ReserveTicketRequest request)
+        {
+            try
+            {
+                var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var ticket = await _service.ReserveTicketAsync(request.FlightId, passengerId, request.SeatNumber);
+                return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPost("{ticketId}/cancel-reservation")]
+        public async Task<IActionResult> CancelReservation(int ticketId)
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var success = await _service.CancelReservationAsync(ticketId, passengerId);
+
+            if (success)
+                return Ok(new { message = "Резервирование успешно отменено" });
+            return Forbid();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("cancel-expired")]
+        public async Task<IActionResult> CancelExpiredReservations()
+        {
+            await _service.CancelExpiredReservationsAsync();
+            return Ok(new { message = "Просроченные резервирования отменены" });
         }
 
         [Authorize(Roles = "Admin,User")]
@@ -94,4 +133,9 @@ namespace AirlineAPI.Controllers
     }
 
 
+    public class ReserveTicketRequest
+    {
+        public int FlightId { get; set; }
+        public string SeatNumber { get; set; }
+    }
 }
