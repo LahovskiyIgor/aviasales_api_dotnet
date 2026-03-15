@@ -229,6 +229,54 @@
   margin: 20px 0;
 }
 
+/* Стили для autocomplete */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+.autocomplete-dropdown li {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-dropdown li:hover {
+  background: #f0f7ff;
+}
+
+.autocomplete-dropdown li:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.autocomplete-dropdown li:last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
 @media (max-width: 768px) {
   .filters-container {
     flex-direction: column;

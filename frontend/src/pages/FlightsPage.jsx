@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import flightService from '../services/flightService';
+import airportService from '../services/airportService';
 import './FlightsPage.css';
 
 const FlightsPage = () => {
@@ -14,6 +15,27 @@ const FlightsPage = () => {
   const [departureAirport, setDepartureAirport] = useState('');
   const [arrivalAirport, setArrivalAirport] = useState('');
   const [departureDate, setDepartureDate] = useState('');
+  
+  // Список аэропортов и состояние для выпадающих списков
+  const [airports, setAirports] = useState([]);
+  const [showDepartureDropdown, setShowDepartureDropdown] = useState(false);
+  const [showArrivalDropdown, setShowArrivalDropdown] = useState(false);
+  const [filteredDepartureAirports, setFilteredDepartureAirports] = useState([]);
+  const [filteredArrivalAirports, setFilteredArrivalAirports] = useState([]);
+
+  useEffect(() => {
+    loadAirports();
+    loadFlights();
+  }, []);
+
+  const loadAirports = async () => {
+    try {
+      const data = await airportService.getAll();
+      setAirports(data);
+    } catch (err) {
+      console.error('Не удалось загрузить список аэропортов:', err);
+    }
+  };
 
   useEffect(() => {
     loadFlights();
@@ -72,6 +94,70 @@ const FlightsPage = () => {
     setDepartureAirport('');
     setArrivalAirport('');
     setDepartureDate('');
+    setFilteredDepartureAirports([]);
+    setFilteredArrivalAirports([]);
+  };
+
+  // Обработчики для поля "Откуда"
+  const handleDepartureChange = (e) => {
+    const value = e.target.value;
+    setDepartureAirport(value);
+    
+    if (value.trim()) {
+      const filtered = airports.filter(airport => 
+        airport.name.toLowerCase().includes(value.toLowerCase()) ||
+        airport.location.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredDepartureAirports(filtered);
+      setShowDepartureDropdown(true);
+    } else {
+      setFilteredDepartureAirports([]);
+      setShowDepartureDropdown(false);
+    }
+  };
+
+  const handleDepartureSelect = (airport) => {
+    setDepartureAirport(`${airport.name} (${airport.location})`);
+    setShowDepartureDropdown(false);
+    setFilteredDepartureAirports([]);
+  };
+
+  const handleDepartureBlur = () => {
+    setTimeout(() => {
+      setShowDepartureDropdown(false);
+      setFilteredDepartureAirports([]);
+    }, 200);
+  };
+
+  // Обработчики для поля "Куда"
+  const handleArrivalChange = (e) => {
+    const value = e.target.value;
+    setArrivalAirport(value);
+    
+    if (value.trim()) {
+      const filtered = airports.filter(airport => 
+        airport.name.toLowerCase().includes(value.toLowerCase()) ||
+        airport.location.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredArrivalAirports(filtered);
+      setShowArrivalDropdown(true);
+    } else {
+      setFilteredArrivalAirports([]);
+      setShowArrivalDropdown(false);
+    }
+  };
+
+  const handleArrivalSelect = (airport) => {
+    setArrivalAirport(`${airport.name} (${airport.location})`);
+    setShowArrivalDropdown(false);
+    setFilteredArrivalAirports([]);
+  };
+
+  const handleArrivalBlur = () => {
+    setTimeout(() => {
+      setShowArrivalDropdown(false);
+      setFilteredArrivalAirports([]);
+    }, 200);
   };
 
   if (loading) {
@@ -89,24 +175,74 @@ const FlightsPage = () => {
       <div className="filters-container">
         <div className="filter-group">
           <label htmlFor="departure">Откуда:</label>
-          <input
-            id="departure"
-            type="text"
-            placeholder="Город или аэропорт отправления"
-            value={departureAirport}
-            onChange={(e) => setDepartureAirport(e.target.value)}
-          />
+          <div className="autocomplete-container">
+            <input
+              id="departure"
+              type="text"
+              placeholder="Город или аэропорт отправления"
+              value={departureAirport}
+              onChange={handleDepartureChange}
+              onFocus={() => {
+                if (departureAirport.trim()) {
+                  const filtered = airports.filter(airport => 
+                    airport.name.toLowerCase().includes(departureAirport.toLowerCase()) ||
+                    airport.location.toLowerCase().includes(departureAirport.toLowerCase())
+                  );
+                  setFilteredDepartureAirports(filtered);
+                  setShowDepartureDropdown(true);
+                }
+              }}
+              onBlur={handleDepartureBlur}
+            />
+            {showDepartureDropdown && filteredDepartureAirports.length > 0 && (
+              <ul className="autocomplete-dropdown">
+                {filteredDepartureAirports.map(airport => (
+                  <li
+                    key={airport.id}
+                    onClick={() => handleDepartureSelect(airport)}
+                  >
+                    {airport.name} ({airport.location})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         <div className="filter-group">
           <label htmlFor="arrival">Куда:</label>
-          <input
-            id="arrival"
-            type="text"
-            placeholder="Город или аэропорт прибытия"
-            value={arrivalAirport}
-            onChange={(e) => setArrivalAirport(e.target.value)}
-          />
+          <div className="autocomplete-container">
+            <input
+              id="arrival"
+              type="text"
+              placeholder="Город или аэропорт прибытия"
+              value={arrivalAirport}
+              onChange={handleArrivalChange}
+              onFocus={() => {
+                if (arrivalAirport.trim()) {
+                  const filtered = airports.filter(airport => 
+                    airport.name.toLowerCase().includes(arrivalAirport.toLowerCase()) ||
+                    airport.location.toLowerCase().includes(arrivalAirport.toLowerCase())
+                  );
+                  setFilteredArrivalAirports(filtered);
+                  setShowArrivalDropdown(true);
+                }
+              }}
+              onBlur={handleArrivalBlur}
+            />
+            {showArrivalDropdown && filteredArrivalAirports.length > 0 && (
+              <ul className="autocomplete-dropdown">
+                {filteredArrivalAirports.map(airport => (
+                  <li
+                    key={airport.id}
+                    onClick={() => handleArrivalSelect(airport)}
+                  >
+                    {airport.name} ({airport.location})
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         <div className="filter-group">
