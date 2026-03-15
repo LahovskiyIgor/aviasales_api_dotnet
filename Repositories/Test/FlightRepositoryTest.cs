@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AirlineAPI.Repositories.Test
 {
 
-    public class FlightRepositoryTest : IFlightRepository
+    public class FlightRepositoryTest
     {
         private readonly List<Flight> _flights = new();
         private int _nextId = 1;
