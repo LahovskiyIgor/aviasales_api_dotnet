@@ -38,12 +38,6 @@ namespace AirlineAPI.Services
 
             ticket.BookingStatus = status;
             
-            // Если оплачиваем или отменяем - очищаем время истечения резервации
-            if (status == "Оплачен" || status == "Отменен")
-            {
-                ticket.ReservationExpiresAt = null;
-            }
-            
             await _repository.UpdateAsync(ticket);
             return true;
         }
@@ -79,8 +73,7 @@ namespace AirlineAPI.Services
                 FlightId = flightId,
                 PassengerId = passengerId,
                 SeatNumber = seatNumber,
-                BookingStatus = "Зарезервирован",
-                ReservationExpiresAt = DateTime.UtcNow.AddMinutes(20)
+                BookingStatus = "Зарезервирован"
             };
 
             await _repository.AddAsync(ticket);
@@ -102,7 +95,6 @@ namespace AirlineAPI.Services
                 return false;
 
             ticket.BookingStatus = "Отменен";
-            ticket.ReservationExpiresAt = null;
             await _repository.UpdateAsync(ticket);
 
             // Обновляем счётчик зарезервированных мест
@@ -118,26 +110,9 @@ namespace AirlineAPI.Services
 
         public async Task CancelExpiredReservationsAsync()
         {
-            var allTickets = await _repository.GetAllAsync();
-            var expiredTickets = allTickets.Where(t => 
-                t.BookingStatus == "Зарезервирован" && 
-                t.ReservationExpiresAt.HasValue && 
-                t.ReservationExpiresAt.Value < DateTime.UtcNow).ToList();
-
-            foreach (var ticket in expiredTickets)
-            {
-                ticket.BookingStatus = "Отменен";
-                ticket.ReservationExpiresAt = null;
-                await _repository.UpdateAsync(ticket);
-
-                // Обновляем счётчик зарезервированных мест
-                var flight = await _flightRepository.GetByIdAsync(ticket.FlightId);
-                if (flight != null && flight.ReservedTickets > 0)
-                {
-                    flight.ReservedTickets--;
-                    await _flightRepository.UpdateAsync(flight);
-                }
-            }
+            // Метод устарел после удаления ReservationExpiresAt
+            // Резервации теперь не имеют автоматического времени истечения
+            await Task.CompletedTask;
         }
     }
 

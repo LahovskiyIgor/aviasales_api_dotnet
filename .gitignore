@@ -1,37 +1,3 @@
-```
-# Build artifacts
-bin/
-obj/
-*.dll
-*.exe
-*.pdb
-*.config
-*.csproj.user
+```csharp
 
-# Dependencies
-packages/
-node_modules/
-.nuget/
-
-# Logs
-*.log
-logs/
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Testing
-TestResults/
 ```
