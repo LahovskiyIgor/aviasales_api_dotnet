@@ -11,7 +11,12 @@ namespace AirlineAPI.Repositories
         private readonly AppDbContext _context;
         public FlightRepository(AppDbContext context) => _context = context;
 
-        public async Task<IEnumerable<Flight>> GetAllAsync() => await _context.Flights.ToListAsync();
+        public async Task<IEnumerable<Flight>> GetAllAsync() => 
+            await _context.Flights
+                .Include(f => f.DepartureAirport)
+                .Include(f => f.ArrivalAirport)
+                .Include(f => f.Airplane)
+                .ToListAsync();
         public async Task<Flight> GetByIdAsync(int id) => 
             await _context.Flights.AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
