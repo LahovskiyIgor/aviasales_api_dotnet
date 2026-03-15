@@ -11,11 +11,13 @@ namespace AirlineAPI.Services
     public class AuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPassengerRepository _passengerRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IUserRepository userRepository, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IPassengerRepository passengerRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
+            _passengerRepository = passengerRepository;
             _configuration = configuration;
         }
 
@@ -33,6 +35,21 @@ namespace AirlineAPI.Services
             };
 
             await _userRepository.AddAsync(user);
+            
+            // Если роль Passanger, создаём связанную сущность Passenger
+            if (request.Role == "Passanger")
+            {
+                var passenger = new Passenger
+                {
+                    FirstName = request.FirstName ?? string.Empty,
+                    LastName = request.LastName ?? string.Empty,
+                    Email = request.Email ?? string.Empty,
+                    Phone = request.Phone ?? string.Empty,
+                    UserId = user.Id
+                };
+                
+                await _passengerRepository.AddAsync(passenger);
+            }
         }
 
         public async Task<string> LoginAsync(LoginRequest request)

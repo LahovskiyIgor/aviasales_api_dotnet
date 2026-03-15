@@ -6,6 +6,9 @@
         public string Username { get; set; } = null!;
         public string PasswordHash { get; set; } = null!;
         public string Role { get; set; } = null!;
+        
+        // Связь с пассажиром (один пользователь может иметь одного пассажира)
+        public Passenger? Passenger { get; set; }
     }
 
 }
