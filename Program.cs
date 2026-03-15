@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).LogTo(Console.WriteLine, LogLevel.Information));
 
 
-// Добавление контроллеров
+// Г„Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ ГЄГ®Г­ГІГ°Г®Г«Г«ГҐГ°Г®Гў
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
         {
@@ -34,7 +34,7 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
-// Регистрация сервисов
+// ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї Г±ГҐГ°ГўГЁГ±Г®Гў
 builder.Services.AddScoped<IAirplaneService, AirplaneService>();
 builder.Services.AddScoped<IAirportService, AirportService>();
 builder.Services.AddScoped<IFlightService, FlightService>();
@@ -42,11 +42,11 @@ builder.Services.AddScoped<IPassengerService, PassengerService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<AuthService>();
 
-// Регистрация фонового сервиса очистки просроченных резервирований
+// ГђГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї ГґГ®Г­Г®ГўГ®ГЈГ® Г±ГҐГ°ГўГЁГ±Г  Г®Г·ГЁГ±ГІГЄГЁ ГЇГ°Г®Г±Г°Г®Г·ГҐГ­Г­Г»Гµ Г°ГҐГ§ГҐГ°ГўГЁГ°Г®ГўГ Г­ГЁГ©
 builder.Services.AddHostedService<ReservationCleanupService>();
 
 
-// Добавление Swagger с поддержкой JWT
+// Г„Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Swagger Г± ГЇГ®Г¤Г¤ГҐГ°Г¦ГЄГ®Г© JWT
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -54,10 +54,10 @@ builder.Services.AddSwaggerGen(c =>
     { 
         Title = "Airline API", 
         Version = "v1",
-        Description = "API для управления авиакомпанией с поддержкой JWT-аутентификации"
+        Description = "API Г¤Г«Гї ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї Г ГўГЁГ ГЄГ®Г¬ГЇГ Г­ГЁГҐГ© Г± ГЇГ®Г¤Г¤ГҐГ°Г¦ГЄГ®Г© JWT-Г ГіГІГҐГ­ГІГЁГґГЁГЄГ Г¶ГЁГЁ"
     });
 
-    // Добавление схемы безопасности JWT
+    // Г„Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г±ГµГҐГ¬Г» ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГЁ JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -107,7 +107,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Использование Swagger в разработке
+// Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Swagger Гў Г°Г Г§Г°Г ГЎГ®ГІГЄГҐ
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -117,6 +117,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 app.Run();
