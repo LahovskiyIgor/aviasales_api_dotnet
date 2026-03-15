@@ -20,6 +20,13 @@ namespace AirlineAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Связь User ↔ Passenger (один к одному)
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Passenger)
+                .WithOne(p => p.User)
+                .HasForeignKey<Passenger>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // AirportEntity — связи
             modelBuilder.Entity<Flight>()
                .HasOne(f => f.DepartureAirport)

@@ -1,6 +1,9 @@
-﻿using AirlineAPI.Entity.Auth;
-using AirlineAPI.Services;
+﻿using AirlineAPI.Entity;
+using AirlineAPI.Entity.Auth;
+using AirlineAPI.Interfaces.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -9,10 +12,12 @@ namespace AirlineAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, IUserRepository userRepository)
         {
             _authService = authService;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
@@ -27,6 +32,37 @@ namespace AirlineAPI.Controllers
         {
             var token = await _authService.LoginAsync(request);
             return Ok(new AuthResponse { Token = token });
+        }
+        
+        /// <summary>
+        /// Получить данные текущего авторизованного пользователя.
+        /// </summary>
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserResponse>> GetCurrentUser()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var user = await _userRepository.GetByIdAsync(userId);
+            
+            if (user == null)
+                return NotFound(new { message = "Пользователь не найден" });
+            
+            var response = new UserResponse
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Role = user.Role,
+                Passenger = user.Passenger != null ? new PassengerInfo
+                {
+                    Id = user.Passenger.Id,
+                    FirstName = user.Passenger.FirstName,
+                    LastName = user.Passenger.LastName,
+                    Email = user.Passenger.Email,
+                    Phone = user.Passenger.Phone
+                } : null
+            };
+            
+            return Ok(response);
         }
     }
 }

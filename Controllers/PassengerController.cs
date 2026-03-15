@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -41,17 +42,20 @@ namespace AirlineAPI.Controllers
         }
 
         /// <summary>
-        /// Получить данные текущего пользователя.
+        /// Получить данные текущего пользователя (пассажира).
         /// </summary>
         [Authorize]
         [HttpGet("my")]
         public async Task<ActionResult<Passenger>> GetMyProfile()
         {
-            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var passenger = await _service.GetByIdAsync(passengerId);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            
+            // Получаем пассажира по UserId (связь User -> Passenger)
+            var passengers = await _service.GetAllAsync();
+            var passenger = passengers.FirstOrDefault(p => p.UserId == userId);
             
             if (passenger == null)
-                return NotFound(new { message = "Профиль не найден" });
+                return NotFound(new { message = "Профиль пассажира не найден" });
             
             return Ok(passenger);
         }
@@ -63,12 +67,25 @@ namespace AirlineAPI.Controllers
         [HttpPut("my")]
         public async Task<IActionResult> UpdateMyProfile([FromBody] Passenger passenger)
         {
-            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
-            if (passenger.Id != passengerId) 
+            // Находим пассажира текущего пользователя
+            var existingPassengers = await _service.GetAllAsync();
+            var existingPassenger = existingPassengers.FirstOrDefault(p => p.UserId == userId);
+            
+            if (existingPassenger == null)
+                return NotFound(new { message = "Профиль пассажира не найден" });
+            
+            if (passenger.Id != existingPassenger.Id) 
                 return BadRequest(new { message = "Нельзя обновить профиль другого пользователя" });
             
-            await _service.UpdateAsync(passenger);
+            // Обновляем только разрешённые поля
+            existingPassenger.FirstName = passenger.FirstName;
+            existingPassenger.LastName = passenger.LastName;
+            existingPassenger.Email = passenger.Email;
+            existingPassenger.Phone = passenger.Phone;
+            
+            await _service.UpdateAsync(existingPassenger);
             return NoContent();
         }
 
@@ -83,7 +100,7 @@ namespace AirlineAPI.Controllers
             return Ok(passenger);
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Passenger passenger)
         {
@@ -91,7 +108,7 @@ namespace AirlineAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = passenger.Id }, passenger);
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Passenger passenger)
         {
@@ -100,7 +117,7 @@ namespace AirlineAPI.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
