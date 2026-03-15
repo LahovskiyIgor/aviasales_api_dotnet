@@ -25,9 +25,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const data = await authService.login(username, password);
-    setUser(data.user);
-    return data;
+    // Login endpoint returns only the token
+    const loginData = await authService.login(username, password);
+    
+    // After receiving token, fetch current user data
+    const userData = await authService.getCurrentUser();
+    setUser(userData);
+    return userData;
   };
 
   const logout = () => {

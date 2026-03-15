@@ -20,7 +20,12 @@ const LoginPage = () => {
       await login(username, password);
       navigate('/flights');
     } catch (err) {
-      setError(err.response?.data?.message || 'Ошибка входа. Проверьте логин и пароль.');
+      // Handle different error response formats
+      const errorMessage = err?.response?.data?.message 
+        || err?.response?.data 
+        || err?.message 
+        || 'Ошибка входа. Проверьте логин и пароль.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

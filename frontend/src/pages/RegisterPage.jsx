@@ -100,8 +100,13 @@ const RegisterPage = () => {
       });
     } catch (error) {
       console.error('Registration error:', error);
+      // Handle different error response formats
+      const errorMessage = error?.response?.data?.message 
+        || error?.response?.data 
+        || error?.message 
+        || 'Ошибка при регистрации. Попробуйте позже.';
       setErrors({
-        submit: error.response?.data?.message || 'Ошибка при регистрации. Попробуйте позже.'
+        submit: errorMessage
       });
     } finally {
       setIsLoading(false);
