@@ -5,6 +5,7 @@ import './RegisterPage.css';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -21,6 +22,13 @@ const RegisterPage = () => {
   const validateForm = () => {
     const newErrors = {};
     
+    // Валидация имени пользователя (логина)
+    if (!formData.username.trim()) {
+      newErrors.username = 'Имя пользователя обязательно';
+    } else if (formData.username.trim().length < 3) {
+      newErrors.username = 'Имя пользователя должно содержать минимум 3 символа';
+    }
+
     // Валидация имени
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'Имя обязательно';
@@ -109,6 +117,21 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit} className="register-form">
           {errors.submit && <div className="error-message">{errors.submit}</div>}
           
+          <div className="form-group">
+            <label htmlFor="username">Имя пользователя (логин)</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Придумайте логин"
+              disabled={isLoading}
+              className={errors.username ? 'input-error' : ''}
+            />
+            {errors.username && <span className="field-error">{errors.username}</span>}
+          </div>
+
           <div className="form-group">
             <label htmlFor="firstName">Имя</label>
             <input
