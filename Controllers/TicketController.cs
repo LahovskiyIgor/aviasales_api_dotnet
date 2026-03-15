@@ -72,7 +72,43 @@ namespace AirlineAPI.Controllers
             return Ok(myTickets);
         }
 
-        [Authorize(Roles = "Admin,User")]
+        /// <summary>
+        /// Получить занятые места на рейсе.
+        /// </summary>
+        [Authorize]
+        [HttpGet("flight/{flightId}/occupied-seats")]
+        public async Task<ActionResult<IEnumerable<string>>> GetOccupiedSeats(int flightId)
+        {
+            try
+            {
+                var seats = await _service.GetOccupiedSeatsAsync(flightId);
+                return Ok(seats);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Получить доступные места на рейсе.
+        /// </summary>
+        [Authorize]
+        [HttpGet("flight/{flightId}/available-seats")]
+        public async Task<ActionResult<IEnumerable<string>>> GetAvailableSeats(int flightId)
+        {
+            try
+            {
+                var seats = await _service.GetAvailableSeatsAsync(flightId);
+                return Ok(seats);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpPost("reserve")]
         public async Task<IActionResult> ReserveTicket([FromBody] ReserveTicketRequest request)
         {
@@ -112,7 +148,7 @@ namespace AirlineAPI.Controllers
             return Ok(new { message = "Просроченные резервирования отменены" });
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Ticket ticket)
         {
@@ -146,14 +182,22 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> CancelTicket(int ticketId)
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var success = await _service.UpdateStatusAsync(ticketId, "Отменен", passengerId);
+            
+            // Пробуем отменить как оплаченный билет
+            var success = await _service.CancelPaidTicketAsync(ticketId, passengerId);
+            
+            // Если не получилось, пробуем как резервацию
+            if (!success)
+            {
+                success = await _service.CancelReservationAsync(ticketId, passengerId);
+            }
 
             if (success)
                 return Ok(new { message = "Билет успешно отменен" });
             return Forbid();
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin,Passanger")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,3 +1,47 @@
-```csharp
+```
+# Build artifacts
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.pdb
+*.ilk
+*.exp
+*.iobj
+*.ipdb
+*.tlog
+*.log
+*.tmp
 
+# Dependencies
+packages/
+bin/
+obj/
+Debug/
+Release/
+.vs/
+.vshost.exe
+.vshost.exe.config
+.vshost.pdb
+
+# Environment
+.env
+.env.local
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+
+# Testing
+TestResults/
+
+# NuGet
+*.nupkg
+.nuget/
 ```
