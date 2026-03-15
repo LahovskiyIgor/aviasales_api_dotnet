@@ -19,12 +19,12 @@ namespace AirlineAPI.Repositories.Test
             new Passenger
             {
                 Id = _nextId++, FirstName = "Иван", LastName = "Иванов",
-                Email = "ivan@mail.com", Phone = "89001112233", Password = "1234"
+                Email = "ivan@mail.com", Phone = "89001112233"
             },
             new Passenger
             {
                 Id = _nextId++, FirstName = "Елена", LastName = "Смирнова",
-                Email = "elena@mail.com", Phone = "89004445566", Password = "5678"
+                Email = "elena@mail.com", Phone = "89004445566"
             }
         });
         }
@@ -50,7 +50,6 @@ namespace AirlineAPI.Repositories.Test
                 existing.LastName = entity.LastName;
                 existing.Email = entity.Email;
                 existing.Phone = entity.Phone;
-                existing.Password = entity.Password;
             }
             return Task.CompletedTask;
         }
