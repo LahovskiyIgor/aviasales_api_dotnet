@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import flightService from '../services/flightService';
+import Header from '../components/Header';
+import AirportSelect from '../components/AirportSelect';
 import './FlightsPage.css';
 
 const FlightsPage = () => {
@@ -11,8 +13,8 @@ const FlightsPage = () => {
   const [error, setError] = useState(null);
   
   // Фильтры
-  const [departureAirport, setDepartureAirport] = useState('');
-  const [arrivalAirport, setArrivalAirport] = useState('');
+  const [departureAirport, setDepartureAirport] = useState(null);
+  const [arrivalAirport, setArrivalAirport] = useState(null);
   const [departureDate, setDepartureDate] = useState('');
 
   useEffect(() => {
@@ -42,15 +44,13 @@ const FlightsPage = () => {
 
     if (departureAirport) {
       result = result.filter(flight => 
-        flight.departureAirport?.name.toLowerCase().includes(departureAirport.toLowerCase()) ||
-        flight.departureAirport?.location.toLowerCase().includes(departureAirport.toLowerCase())
+        flight.departureAirport?.id === departureAirport.id
       );
     }
 
     if (arrivalAirport) {
       result = result.filter(flight => 
-        flight.arrivalAirport?.name.toLowerCase().includes(arrivalAirport.toLowerCase()) ||
-        flight.arrivalAirport?.location.toLowerCase().includes(arrivalAirport.toLowerCase())
+        flight.arrivalAirport?.id === arrivalAirport.id
       );
     }
 
@@ -84,45 +84,40 @@ const FlightsPage = () => {
 
   return (
     <div className="flights-page">
-      <h1>Доступные рейсы</h1>
+      <Header />
       
-      <div className="filters-container">
-        <div className="filter-group">
-          <label htmlFor="departure">Откуда:</label>
-          <input
-            id="departure"
-            type="text"
-            placeholder="Город или аэропорт отправления"
+      <div className="content-container">
+        <h1>Доступные рейсы</h1>
+        
+        <div className="filters-container">
+          <AirportSelect
+            label="Откуда:"
             value={departureAirport}
-            onChange={(e) => setDepartureAirport(e.target.value)}
+            onChange={setDepartureAirport}
+            placeholder="Город или аэропорт отправления"
           />
-        </div>
 
-        <div className="filter-group">
-          <label htmlFor="arrival">Куда:</label>
-          <input
-            id="arrival"
-            type="text"
-            placeholder="Город или аэропорт прибытия"
+          <AirportSelect
+            label="Куда:"
             value={arrivalAirport}
-            onChange={(e) => setArrivalAirport(e.target.value)}
+            onChange={setArrivalAirport}
+            placeholder="Город или аэропорт прибытия"
           />
-        </div>
 
-        <div className="filter-group">
-          <label htmlFor="date">Дата вылета:</label>
-          <input
-            id="date"
-            type="date"
-            value={departureDate}
-            onChange={(e) => setDepartureDate(e.target.value)}
-          />
-        </div>
+          <div className="filter-group">
+            <label htmlFor="date">Дата вылета:</label>
+            <input
+              id="date"
+              type="date"
+              value={departureDate}
+              onChange={(e) => setDepartureDate(e.target.value)}
+            />
+          </div>
 
-        <button className="clear-filters-btn" onClick={clearFilters}>
-          Сбросить фильтры
-        </button>
-      </div>
+          <button className="clear-filters-btn" onClick={clearFilters}>
+            Сбросить фильтры
+          </button>
+        </div>
 
       <div className="flights-list">
         {filteredFlights.length === 0 ? (
@@ -189,6 +184,7 @@ const FlightsPage = () => {
             </div>
           ))
         )}
+      </div>
       </div>
     </div>
   );

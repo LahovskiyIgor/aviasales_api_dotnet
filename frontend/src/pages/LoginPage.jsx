@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Header from '../components/Header';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -33,6 +34,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
+      <Header />
       <div className="login-container">
         <h1 className="login-title">AirlineAPI</h1>
         <h2 className="login-subtitle">Вход в систему</h2>

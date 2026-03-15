@@ -1,0 +1,163 @@
+.airport-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.airport-select-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.airport-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.airport-select-input {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s;
+  background: white;
+}
+
+.airport-select-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.airport-select-input::placeholder {
+  color: #9ca3af;
+}
+
+.airport-select-clear {
+  position: absolute;
+  right: 30px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.airport-select-clear:hover {
+  color: #6b7280;
+}
+
+.airport-select-loading {
+  position: absolute;
+  right: 30px;
+  font-size: 16px;
+}
+
+.airport-select-arrow {
+  position: absolute;
+  right: 12px;
+  font-size: 12px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.airport-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.airport-select-option {
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.airport-select-option:last-child {
+  border-bottom: none;
+}
+
+.airport-select-option:hover {
+  background: #f9fafb;
+}
+
+.airport-option-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.airport-code {
+  background: #667eea;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.airport-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.airport-location {
+  font-size: 13px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.airport-select-no-results {
+  padding: 12px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.airport-select-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.airport-select-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.airport-select-dropdown::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.airport-select-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}

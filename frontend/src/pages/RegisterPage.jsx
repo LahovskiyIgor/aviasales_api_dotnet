@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Header from '../components/Header';
 import './RegisterPage.css';
 
 const RegisterPage = () => {
@@ -115,6 +116,7 @@ const RegisterPage = () => {
 
   return (
     <div className="register-page">
+      <Header />
       <div className="register-container">
         <h1 className="register-title">AirlineAPI</h1>
         <h2 className="register-subtitle">Регистрация</h2>
