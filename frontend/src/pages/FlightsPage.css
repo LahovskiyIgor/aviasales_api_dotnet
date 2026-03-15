@@ -1,0 +1,264 @@
+.flights-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.flights-page h1 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.filters-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.filter-group input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.clear-filters-btn {
+  padding: 10px 20px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.clear-filters-btn:hover {
+  background: #5a6268;
+}
+
+.flights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flight-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.flight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.flight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.flight-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.airplane-model {
+  font-size: 14px;
+  color: #666;
+  background: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.flight-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.airport {
+  flex: 1;
+  text-align: center;
+}
+
+.airport.departure {
+  text-align: left;
+}
+
+.airport.arrival {
+  text-align: right;
+}
+
+.airport-code {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.airport-city {
+  display: block;
+  font-size: 13px;
+  color: #888;
+}
+
+.route-arrow {
+  font-size: 24px;
+  color: #007bff;
+  padding: 0 20px;
+}
+
+.flight-time {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.departure-time,
+.arrival-time {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.time-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.time-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.flight-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f0f7ff;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.available-seats {
+  font-weight: 700;
+  color: #28a745;
+  margin-left: auto;
+}
+
+.select-flight-btn {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.select-flight-btn:hover {
+  background: #0056b3;
+}
+
+.loading,
+.error,
+.no-flights {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.no-flights {
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .flight-route {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .airport.departure,
+  .airport.arrival {
+    text-align: center;
+  }
+
+  .route-arrow {
+    transform: rotate(90deg);
+    padding: 10px 0;
+  }
+
+  .flight-seats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .available-seats {
+    margin-left: 0;
+  }
+}
