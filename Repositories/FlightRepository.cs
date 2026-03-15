@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirlineAPI.Repositories
 {
-    public class FlightRepository : IFlightRepository
+    public class FlightRepository
     {
         private readonly AppDbContext _context;
         public FlightRepository(AppDbContext context) => _context = context;
