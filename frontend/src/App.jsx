@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import FlightsPage from './pages/FlightsPage';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -29,32 +30,29 @@ const PublicRoute = ({ children }) => {
 function AppRoutes() {
   return (
     <Routes>
-      <Route 
-        path="/login" 
+      <Route
+        path="/login"
         element={
           <PublicRoute>
             <LoginPage />
           </PublicRoute>
-        } 
+        }
       />
-      <Route 
-        path="/register" 
+      <Route
+        path="/register"
         element={
           <PublicRoute>
             <RegisterPage />
           </PublicRoute>
-        } 
+        }
       />
-      <Route 
-        path="/flights" 
+      <Route
+        path="/flights"
         element={
           <ProtectedRoute>
-            <div className="page-container">
-              <h1>Список рейсов</h1>
-              <p>Здесь будет список рейсов</p>
-            </div>
+            <FlightsPage />
           </ProtectedRoute>
-        } 
+        }
       />
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="*" element={<Navigate to="/login" />} />
