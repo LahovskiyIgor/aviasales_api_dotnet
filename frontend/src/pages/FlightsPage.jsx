@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { flightService } from '../services/flightService';
+import flightService from '../services/flightService';
 import './FlightsPage.css';
 
 const FlightsPage = () => {
