@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AirlineAPI.Services
 {
@@ -38,12 +39,6 @@ namespace AirlineAPI.Services
 
             ticket.BookingStatus = status;
             
-            // Если оплачиваем или отменяем - очищаем время истечения резервации
-            if (status == "Оплачен" || status == "Отменен")
-            {
-                ticket.ReservationExpiresAt = null;
-            }
-            
             await _repository.UpdateAsync(ticket);
             return true;
         }
@@ -58,16 +53,23 @@ namespace AirlineAPI.Services
 
         public async Task<Ticket> ReserveTicketAsync(int flightId, int passengerId, string seatNumber)
         {
-            // Проверяем существование рейса
-            var flight = await _flightRepository.GetByIdAsync(flightId);
+            // Проверяем существование рейса и загружаем данные о самолёте
+            var flight = await _flightRepository.GetByIdWithAirplaneAsync(flightId);
             if (flight == null)
                 throw new ArgumentException("Рейс не найден");
+            
+            if (flight.Airplane == null)
+                throw new ArgumentException("Данные о самолёте недоступны");
+
+            // Валидация формата номера места (например, "1A", "12B", "25C")
+            if (!IsValidSeatNumber(seatNumber))
+                throw new ArgumentException("Неверный формат номера места");
 
             // Проверяем, не занято ли место
             var existingTickets = await _repository.GetAllAsync();
             var seatTaken = existingTickets.Any(t => 
                 t.FlightId == flightId && 
-                t.SeatNumber == seatNumber && 
+                t.SeatNumber.ToUpper() == seatNumber.ToUpper() && 
                 t.BookingStatus is "Зарезервирован" or "Оплачен");
             
             if (seatTaken)
@@ -78,9 +80,8 @@ namespace AirlineAPI.Services
             {
                 FlightId = flightId,
                 PassengerId = passengerId,
-                SeatNumber = seatNumber,
-                BookingStatus = "Зарезервирован",
-                ReservationExpiresAt = DateTime.UtcNow.AddMinutes(20)
+                SeatNumber = seatNumber.ToUpper(),
+                BookingStatus = "Зарезервирован"
             };
 
             await _repository.AddAsync(ticket);
@@ -102,7 +103,6 @@ namespace AirlineAPI.Services
                 return false;
 
             ticket.BookingStatus = "Отменен";
-            ticket.ReservationExpiresAt = null;
             await _repository.UpdateAsync(ticket);
 
             // Обновляем счётчик зарезервированных мест
@@ -116,28 +116,88 @@ namespace AirlineAPI.Services
             return true;
         }
 
-        public async Task CancelExpiredReservationsAsync()
+        public async Task<bool> CancelPaidTicketAsync(int ticketId, int passengerId)
         {
-            var allTickets = await _repository.GetAllAsync();
-            var expiredTickets = allTickets.Where(t => 
-                t.BookingStatus == "Зарезервирован" && 
-                t.ReservationExpiresAt.HasValue && 
-                t.ReservationExpiresAt.Value < DateTime.UtcNow).ToList();
+            var ticket = await _repository.GetByIdAsync(ticketId);
+            if (ticket == null || ticket.PassengerId != passengerId)
+                return false;
 
-            foreach (var ticket in expiredTickets)
+            if (ticket.BookingStatus != "Оплачен")
+                return false;
+
+            ticket.BookingStatus = "Отменен";
+            await _repository.UpdateAsync(ticket);
+
+            // Обновляем счётчик проданных мест
+            var flight = await _flightRepository.GetByIdAsync(ticket.FlightId);
+            if (flight != null && flight.SoldTickets > 0)
             {
-                ticket.BookingStatus = "Отменен";
-                ticket.ReservationExpiresAt = null;
-                await _repository.UpdateAsync(ticket);
+                flight.SoldTickets--;
+                await _flightRepository.UpdateAsync(flight);
+            }
 
-                // Обновляем счётчик зарезервированных мест
-                var flight = await _flightRepository.GetByIdAsync(ticket.FlightId);
-                if (flight != null && flight.ReservedTickets > 0)
+            return true;
+        }
+
+        public async Task<IEnumerable<string>> GetAvailableSeatsAsync(int flightId)
+        {
+            var flight = await _flightRepository.GetByIdWithAirplaneAsync(flightId);
+            if (flight == null)
+                throw new ArgumentException("Рейс не найден");
+            
+            if (flight.Airplane == null)
+                throw new ArgumentException("Данные о самолёте недоступны");
+
+            var allTickets = await _repository.GetAllAsync();
+            var occupiedSeats = allTickets
+                .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
+                .Select(t => t.SeatNumber.ToUpper())
+                .ToHashSet();
+
+            // Генерируем все возможные места на основе вместимости самолёта
+            var availableSeats = new List<string>();
+            int rows = flight.Airplane.Capacity / 4; // 4 места в ряду (A, B, C, D)
+            char[] seatLetters = { 'A', 'B', 'C', 'D' };
+
+            for (int row = 1; row <= rows; row++)
+            {
+                foreach (var letter in seatLetters)
                 {
-                    flight.ReservedTickets--;
-                    await _flightRepository.UpdateAsync(flight);
+                    string seatNumber = $"{row}{letter}";
+                    if (!occupiedSeats.Contains(seatNumber))
+                    {
+                        availableSeats.Add(seatNumber);
+                    }
                 }
             }
+
+            return availableSeats;
+        }
+
+        public async Task<IEnumerable<string>> GetOccupiedSeatsAsync(int flightId)
+        {
+            var allTickets = await _repository.GetAllAsync();
+            return allTickets
+                .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
+                .Select(t => t.SeatNumber.ToUpper())
+                .ToList();
+        }
+
+        private bool IsValidSeatNumber(string seatNumber)
+        {
+            if (string.IsNullOrWhiteSpace(seatNumber))
+                return false;
+
+            // Формат: число + буква (например, "1A", "12B", "25C")
+            var pattern = @"^[1-9][0-9]*[A-Da-d]$";
+            return Regex.IsMatch(seatNumber, pattern);
+        }
+
+        public async Task CancelExpiredReservationsAsync()
+        {
+            // Метод устарел после удаления ReservationExpiresAt
+            // Резервации теперь не имеют автоматического времени истечения
+            await Task.CompletedTask;
         }
     }
 

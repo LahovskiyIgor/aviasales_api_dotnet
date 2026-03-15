@@ -20,6 +20,9 @@ namespace AirlineAPI.Services
         
         Task<Ticket> ReserveTicketAsync(int flightId, int passengerId, string seatNumber);
         Task<bool> CancelReservationAsync(int ticketId, int passengerId);
+        Task<bool> CancelPaidTicketAsync(int ticketId, int passengerId);
+        Task<IEnumerable<string>> GetAvailableSeatsAsync(int flightId);
+        Task<IEnumerable<string>> GetOccupiedSeatsAsync(int flightId);
         Task CancelExpiredReservationsAsync();
     }
 
