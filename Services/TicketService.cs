@@ -13,11 +13,13 @@ namespace AirlineAPI.Services
     {
         private readonly ITicketRepository _repository;
         private readonly IFlightRepository _flightRepository;
+        private readonly IFlightSeatService _seatService;
 
-        public TicketService(ITicketRepository repository, IFlightRepository flightRepository)
+        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, IFlightSeatService seatService)
         {
             _repository = repository;
             _flightRepository = flightRepository;
+            _seatService = seatService;
         }
 
         public Task<IEnumerable<Ticket>> GetAllAsync() => _repository.GetAllAsync();
@@ -37,9 +39,14 @@ namespace AirlineAPI.Services
             if (!validStatuses.Contains(status))
                 return false;
 
+            string oldStatus = ticket.BookingStatus;
             ticket.BookingStatus = status;
             
             await _repository.UpdateAsync(ticket);
+            
+            // Обновляем статус места в FlightSeat
+            await _seatService.UpdateSeatStatusFromTicketAsync(ticket.FlightId, ticket.SeatNumber, status);
+            
             return true;
         }
 
@@ -65,14 +72,12 @@ namespace AirlineAPI.Services
             if (!IsValidSeatNumber(seatNumber))
                 throw new ArgumentException("Неверный формат номера места");
 
-            // Проверяем, не занято ли место
-            var existingTickets = await _repository.GetAllAsync();
-            var seatTaken = existingTickets.Any(t => 
-                t.FlightId == flightId && 
-                t.SeatNumber.ToUpper() == seatNumber.ToUpper() && 
-                t.BookingStatus is "Зарезервирован" or "Оплачен");
+            // Проверяем статус места через FlightSeat
+            var seat = await _seatService.GetSeatAsync(flightId, seatNumber);
+            if (seat == null)
+                throw new ArgumentException("Место не найдено");
             
-            if (seatTaken)
+            if (seat.Status != SeatStatus.Available)
                 throw new InvalidOperationException("Место уже занято");
 
             // Создаём резервирование
@@ -86,7 +91,10 @@ namespace AirlineAPI.Services
 
             await _repository.AddAsync(ticket);
             
-            // Обновляем счётчик зарезервированных мест
+            // Обновляем статус места
+            await _seatService.ReserveSeatAsync(flightId, seatNumber.ToUpper(), ticket.Id);
+            
+            // Инициализируем счётчик зарезервированных мест
             flight.ReservedTickets++;
             await _flightRepository.UpdateAsync(flight);
 
@@ -104,6 +112,9 @@ namespace AirlineAPI.Services
 
             ticket.BookingStatus = "Отменен";
             await _repository.UpdateAsync(ticket);
+
+            // Освобождаем место через FlightSeat
+            await _seatService.UpdateSeatStatusFromTicketAsync(ticket.FlightId, ticket.SeatNumber, "Отменен");
 
             // Обновляем счётчик зарезервированных мест
             var flight = await _flightRepository.GetByIdAsync(ticket.FlightId);
@@ -128,6 +139,9 @@ namespace AirlineAPI.Services
             ticket.BookingStatus = "Отменен";
             await _repository.UpdateAsync(ticket);
 
+            // Освобождаем место через FlightSeat
+            await _seatService.UpdateSeatStatusFromTicketAsync(ticket.FlightId, ticket.SeatNumber, "Отменен");
+
             // Обновляем счётчик проданных мест
             var flight = await _flightRepository.GetByIdAsync(ticket.FlightId);
             if (flight != null && flight.SoldTickets > 0)
@@ -148,38 +162,32 @@ namespace AirlineAPI.Services
             if (flight.Airplane == null)
                 throw new ArgumentException("Данные о самолёте недоступны");
 
-            var allTickets = await _repository.GetAllAsync();
-            var occupiedSeats = allTickets
-                .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
-                .Select(t => t.SeatNumber.ToUpper())
-                .ToHashSet();
-
-            // Генерируем все возможные места на основе вместимости самолёта
-            var availableSeats = new List<string>();
-            int rows = flight.Airplane.Capacity / 4; // 4 места в ряду (A, B, C, D)
-            char[] seatLetters = { 'A', 'B', 'C', 'D' };
-
-            for (int row = 1; row <= rows; row++)
+            // Получаем все места для рейса из FlightSeats
+            var allSeats = await _seatService.GetAllSeatsAsync(flightId);
+            
+            // Если места ещё не инициализированы, создаём их
+            if (!allSeats.Any())
             {
-                foreach (var letter in seatLetters)
-                {
-                    string seatNumber = $"{row}{letter}";
-                    if (!occupiedSeats.Contains(seatNumber))
-                    {
-                        availableSeats.Add(seatNumber);
-                    }
-                }
+                await _seatService.InitializeSeatsForFlightAsync(flightId, flight.Airplane.Capacity);
+                allSeats = await _seatService.GetAllSeatsAsync(flightId);
             }
 
-            return availableSeats;
+            // Возвращаем только доступные места
+            return allSeats
+                .Where(s => s.Status == SeatStatus.Available)
+                .Select(s => s.SeatNumber)
+                .ToList();
         }
 
         public async Task<IEnumerable<string>> GetOccupiedSeatsAsync(int flightId)
         {
-            var allTickets = await _repository.GetAllAsync();
-            return allTickets
-                .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
-                .Select(t => t.SeatNumber.ToUpper())
+            // Получаем все места для рейса из FlightSeats
+            var allSeats = await _seatService.GetAllSeatsAsync(flightId);
+            
+            // Возвращаем только занятые места (зарезервированные или проданные)
+            return allSeats
+                .Where(s => s.Status == SeatStatus.Reserved || s.Status == SeatStatus.Sold)
+                .Select(s => s.SeatNumber)
                 .ToList();
         }
 

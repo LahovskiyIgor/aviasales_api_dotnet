@@ -14,6 +14,11 @@ const flightService = {
   getDetails: async (id) => {
     const response = await api.get(`/flight/${id}/details`);
     return response.data;
+  },
+
+  getSeats: async (id) => {
+    const response = await api.get(`/flight/${id}/seats`);
+    return response.data;
   }
 };
 

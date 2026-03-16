@@ -1,1 +1,45 @@
-Nothing should be ignored based on the provided file changes, as they only include source code files (.jsx) without any build artifacts, dependencies, or temporary files.
+```
+# Build artifacts
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+bin/
+obj/
+Debug/
+Release/
+
+# Dependencies
+packages/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment specific
+.env
+.env.local
+.env.*
+.appsettings.*
+
+# IDE files
+.vs/
+.idea/
+*.userprefs
+*.swp
+*.swo
+
+# OS generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*~
+```

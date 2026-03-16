@@ -19,10 +19,12 @@ namespace AirlineAPI.Controllers
     public class FlightController : ControllerBase
     {
         private readonly IFlightService _service;
+        private readonly IFlightSeatService _seatService;
 
-        public FlightController(IFlightService service)
+        public FlightController(IFlightService service, IFlightSeatService seatService)
         {
             _service = service;
+            _seatService = seatService;
         }
 
         [HttpGet]
@@ -48,11 +50,42 @@ namespace AirlineAPI.Controllers
             return Ok(flight);
         }
 
+        /// <summary>
+        /// Получить все места рейса с их статусами.
+        /// </summary>
+        [Authorize]
+        [HttpGet("{id}/seats")]
+        public async Task<IActionResult> GetFlightSeats(int id)
+        {
+            var seats = await _seatService.GetAllSeatsAsync(id);
+            
+            // Если места ещё не инициализированы, нужно сначала получить данные о рейсе
+            if (!seats.Any())
+            {
+                var flight = await _service.GetByIdAsync(id);
+                if (flight == null)
+                    return NotFound(new { message = "Рейс не найден" });
+                
+                // Инициализируем места
+                await _seatService.InitializeSeatsForFlightAsync(id, flight.TotalSeats);
+                seats = await _seatService.GetAllSeatsAsync(id);
+            }
+            
+            return Ok(seats);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Flight flight)
         {
             await _service.AddAsync(flight);
+            
+            // Инициализируем места для нового рейса
+            if (flight.Id > 0)
+            {
+                await _seatService.InitializeSeatsForFlightAsync(flight.Id, flight.TotalSeats);
+            }
+            
             return CreatedAtAction(nameof(GetById), new { id = flight.Id }, flight);
         }
 
