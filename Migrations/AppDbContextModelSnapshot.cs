@@ -245,6 +245,24 @@ namespace AirlineAPI.Migrations
                     b.Navigation("Passenger");
                 });
 
+            modelBuilder.Entity("AirlineAPI.Entity.FlightSeat", b =>
+                {
+                    b.HasOne("AirlineAPI.Entity.Flight", "Flight")
+                        .WithMany()
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AirlineAPI.Entity.Ticket", "Ticket")
+                        .WithOne()
+                        .HasForeignKey("AirlineAPI.Entity.FlightSeat", "TicketId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Flight");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("AirlineAPI.Entity.Airplane", b =>
                 {
                     b.Navigation("Flights");

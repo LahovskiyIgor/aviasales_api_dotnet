@@ -68,11 +68,12 @@ namespace AirlineAPI.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // FlightSeat → Ticket (один к одному, nullable)
+            // Важно: Restrict вместо SetNull, чтобы избежать циклов каскадного удаления
             modelBuilder.Entity<FlightSeat>()
                 .HasOne(fs => fs.Ticket)
                 .WithOne()
                 .HasForeignKey<FlightSeat>(fs => fs.TicketId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
