@@ -1,34 +1,49 @@
-```gitignore
-# Build artifacts
-bin/
-obj/
-*.dll
+```
+# Build artifacts and compiled files
+*.pyc
+__pycache__/
+*.o
+*.obj
 *.exe
-*.pdb
-*.config
-*.csproj.user
+*.dll
+*.so
+*.class
+*.out
 
 # Dependencies
-packages/
 node_modules/
-
-# Logs and temp files
-*.log
-*.tmp
-*.temp
-
-# Environment
+venv/
+.venv/
 .env
 .env.local
 *.env.*
 
-# Editors
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
-# OS generated files
+# Logs
+*.log
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Distribution packages
+dist/
+build/
+target/
+.gradle/
+
+# Python specific
+.mypy_cache/
+.pytest_cache/
+
+# System files
 .DS_Store
 Thumbs.db
 ```

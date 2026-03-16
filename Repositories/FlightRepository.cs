@@ -23,6 +23,7 @@ namespace AirlineAPI.Repositories
                 .Include(f => f.ArrivalAirport)
                 .Include(f => f.Airplane)
                 .Include(f => f.Tickets)
+                .Include(f => f.Seats)
                 .FirstOrDefaultAsync(f => f.Id == flightId);
         }
 
@@ -30,6 +31,7 @@ namespace AirlineAPI.Repositories
         {
             return await _context.Flights
                 .Include(f => f.Airplane)
+                .Include(f => f.Seats)
                 .FirstOrDefaultAsync(f => f.Id == flightId);
         }
 
