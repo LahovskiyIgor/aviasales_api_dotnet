@@ -21,6 +21,8 @@
         public int SoldTickets { get; set; }
         public int ReservedTickets { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        
+        public ICollection<FlightSeat> Seats { get; set; } = new List<FlightSeat>();
     }
 }

@@ -10,6 +10,7 @@ using AirlineAPI.Data;
 using System.Text.Json.Serialization;
 using AirlineAPI.BackgroundServices;
 using Microsoft.OpenApi.Models;
+using AirlineAPI.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFlightSeatRepository, FlightSeatRepository>();
 
 
 // Ðåãèñòðàöèÿ ñåðâèñîâ

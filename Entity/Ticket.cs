@@ -11,6 +11,9 @@
         public Passenger Passenger { get; set; }
 
         public string BookingStatus { get; set; } = "Оплачен"; // Значение по умолчанию: Зарезервирован, Оплачен, Отменен
-        public string SeatNumber { get; set; }
+        public string SeatNumber { get; set; } = string.Empty;
+        
+        public int? FlightSeatId { get; set; }
+        public FlightSeat? FlightSeat { get; set; }
     }
 }
