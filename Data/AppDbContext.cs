@@ -17,6 +17,7 @@ namespace AirlineAPI.Data
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Seat> Seats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,7 +58,14 @@ namespace AirlineAPI.Data
                 .HasOne(t => t.Passenger)
                 .WithMany(p => p.Tickets)
                 .HasForeignKey(t => t.PassengerId)
-                .OnDelete(DeleteBehavior.Cascade); ;
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Seat → Flight
+            modelBuilder.Entity<Seat>()
+                .HasOne(s => s.Flight)
+                .WithMany(f => f.Seats)
+                .HasForeignKey(s => s.FlightId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

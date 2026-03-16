@@ -32,6 +32,7 @@ builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 
 
 // Ðåãèñòðàöèÿ ñåðâèñîâ
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IPassengerService, PassengerService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ISeatService, SeatService>();
 
 // Ðåãèñòðàöèÿ ôîíîâîãî ñåðâèñà î÷èñòêè ïðîñðî÷åííûõ ðåçåðâèðîâàíèé
 builder.Services.AddHostedService<ReservationCleanupService>();

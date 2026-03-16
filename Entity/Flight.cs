@@ -22,5 +22,6 @@
         public int ReservedTickets { get; set; }
 
         public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Seat> Seats { get; set; } = new List<Seat>();
     }
 }

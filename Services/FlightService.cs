@@ -12,10 +12,12 @@ namespace AirlineAPI.Services
     public class FlightService : IFlightService
     {
         private readonly IFlightRepository _repository;
+        private readonly ISeatService _seatService;
 
-        public FlightService(IFlightRepository repository)
+        public FlightService(IFlightRepository repository, ISeatService seatService)
         {
             _repository = repository;
+            _seatService = seatService;
         }
 
         public Task<Flight?> GetFlightWithDetailsAsync(int flightId)
@@ -23,11 +25,13 @@ namespace AirlineAPI.Services
             return _repository.GetFlightDetailedAsync(flightId);
         }
 
-
-
-        public Task<IEnumerable<Flight>> GetAllAsync() => _repository.GetAllAsync();
-        public Task<Flight> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
-        public Task AddAsync(Flight flight) => _repository.AddAsync(flight);
+        public async Task AddAsync(Flight flight)
+        {
+            await _repository.AddAsync(flight);
+            // После создания рейса инициализируем места
+            await _seatService.InitializeSeatsForFlightAsync(flight.Id);
+        }
+        
         public Task UpdateAsync(Flight flight) => _repository.UpdateAsync(flight);
         public Task DeleteAsync(int id) => _repository.DeleteAsync(id);
     }
