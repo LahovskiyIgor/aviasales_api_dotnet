@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import flightService from '../services/flightService';
 import airportService from '../services/airportService';
+import AirportSuggestion from '../components/AirportSuggestion';
 import './FlightsPage.css';
 
 const FlightsPage = () => {
@@ -64,15 +65,13 @@ const FlightsPage = () => {
 
     if (departureAirport) {
       result = result.filter(flight => 
-        flight.departureAirport?.name.toLowerCase().includes(departureAirport.toLowerCase()) ||
-        flight.departureAirport?.location.toLowerCase().includes(departureAirport.toLowerCase())
+          flight.departureAirport?.name.toLowerCase().includes(departureAirport.toLowerCase())
       );
     }
 
     if (arrivalAirport) {
       result = result.filter(flight => 
-        flight.arrivalAirport?.name.toLowerCase().includes(arrivalAirport.toLowerCase()) ||
-        flight.arrivalAirport?.location.toLowerCase().includes(arrivalAirport.toLowerCase())
+          flight.arrivalAirport?.name.toLowerCase().includes(arrivalAirport.toLowerCase())
       );
     }
 
@@ -117,7 +116,7 @@ const FlightsPage = () => {
   };
 
   const handleDepartureSelect = (airport) => {
-    setDepartureAirport(`${airport.name} (${airport.location})`);
+    setDepartureAirport(airport.name);
     setShowDepartureDropdown(false);
     setFilteredDepartureAirports([]);
   };
@@ -148,7 +147,7 @@ const FlightsPage = () => {
   };
 
   const handleArrivalSelect = (airport) => {
-    setArrivalAirport(`${airport.name} (${airport.location})`);
+    setArrivalAirport(airport.name);
     setShowArrivalDropdown(false);
     setFilteredArrivalAirports([]);
   };
@@ -197,12 +196,11 @@ const FlightsPage = () => {
             {showDepartureDropdown && filteredDepartureAirports.length > 0 && (
               <ul className="autocomplete-dropdown">
                 {filteredDepartureAirports.map(airport => (
-                  <li
-                    key={airport.id}
-                    onClick={() => handleDepartureSelect(airport)}
-                  >
-                    {airport.name} ({airport.location})
-                  </li>
+                    <AirportSuggestion
+                        key={airport.id}
+                        airport={airport}
+                        onClick={handleDepartureSelect}
+                    />
                 ))}
               </ul>
             )}
@@ -233,12 +231,11 @@ const FlightsPage = () => {
             {showArrivalDropdown && filteredArrivalAirports.length > 0 && (
               <ul className="autocomplete-dropdown">
                 {filteredArrivalAirports.map(airport => (
-                  <li
-                    key={airport.id}
-                    onClick={() => handleArrivalSelect(airport)}
-                  >
-                    {airport.name} ({airport.location})
-                  </li>
+                    <AirportSuggestion
+                        key={airport.id}
+                        airport={airport}
+                        onClick={handleArrivalSelect}
+                    />
                 ))}
               </ul>
             )}
