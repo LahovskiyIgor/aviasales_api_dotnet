@@ -14,6 +14,7 @@ namespace AirlineAPI.Data
 
         public DbSet<AirportEntity> Airports { get; set; }
         public DbSet<Airplane> Airplanes { get; set; }
+        public DbSet<Seat> Seats { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
@@ -57,7 +58,21 @@ namespace AirlineAPI.Data
                 .HasOne(t => t.Passenger)
                 .WithMany(p => p.Tickets)
                 .HasForeignKey(t => t.PassengerId)
-                .OnDelete(DeleteBehavior.Cascade); ;
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Ticket → Seat
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Seat)
+                .WithMany(s => s.Tickets)
+                .HasForeignKey(t => t.SeatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Seat → Airplane
+            modelBuilder.Entity<Seat>()
+                .HasOne(s => s.Airplane)
+                .WithMany(a => a.Seats)
+                .HasForeignKey(s => s.AirplaneId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

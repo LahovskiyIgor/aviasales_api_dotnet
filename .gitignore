@@ -1,1 +1,42 @@
-Nothing should be ignored based on the provided file changes, as they only include source code files (.jsx) without any build artifacts, dependencies, or temporary files.
+```
+# Build artifacts
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.config
+*.runtimeconfig.json
+
+# Dependencies
+packages/
+node_modules/
+.nuget/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+htmlcov/
+*.coverage
+
+# Temporary files
+*.tmp
+*~
+```

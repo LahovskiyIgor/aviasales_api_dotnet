@@ -9,6 +9,7 @@ namespace AirlineAPI.Interfaces.Repositories
 
         Task<Flight?> GetFlightDetailedAsync(int flightId);
         Task<Flight?> GetByIdWithAirplaneAsync(int flightId);
+        Task<Flight?> GetByIdWithAirplaneAndSeatsAsync(int flightId);
 
         Task AddAsync(Flight flight);
         Task UpdateAsync(Flight flight);
