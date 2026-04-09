@@ -1,11 +1,6 @@
-﻿using AirlineAPI.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AirlineAPI.Entity;
 
-namespace AirlineAPI.Services
+namespace AirlineAPI.Interfaces.Services
 {
     public interface ITicketService
     {
@@ -18,12 +13,11 @@ namespace AirlineAPI.Services
         Task<bool> UpdateStatusAsync(int ticketId, string status, int passengerId);
         Task<Ticket> GetByPassengerAndIdAsync(int ticketId, int passengerId);
         
-        Task<Ticket> ReserveTicketAsync(int flightId, int passengerId, string seatNumber);
+        Task<Ticket> ReserveTicketAsync(int flightId, int passengerId, int seatId);
         Task<bool> CancelReservationAsync(int ticketId, int passengerId);
         Task<bool> CancelPaidTicketAsync(int ticketId, int passengerId);
-        Task<IEnumerable<string>> GetAvailableSeatsAsync(int flightId);
-        Task<IEnumerable<string>> GetOccupiedSeatsAsync(int flightId);
+        Task<IEnumerable<Seat>> GetAvailableSeatsAsync(int flightId);
+        Task<IEnumerable<Seat>> GetOccupiedSeatsAsync(int flightId);
         Task CancelExpiredReservationsAsync();
     }
-
 }

@@ -33,6 +33,14 @@ namespace AirlineAPI.Repositories
                 .FirstOrDefaultAsync(f => f.Id == flightId);
         }
 
+        public async Task<Flight?> GetByIdWithAirplaneAndSeatsAsync(int flightId)
+        {
+            return await _context.Flights
+                .Include(f => f.Airplane)
+                    .ThenInclude(a => a.Seats)
+                .FirstOrDefaultAsync(f => f.Id == flightId);
+        }
+
         public async Task AddAsync(Flight flight) { _context.Flights.Add(flight); await _context.SaveChangesAsync(); }
         public async Task UpdateAsync(Flight flight) { _context.Flights.Update(flight); await _context.SaveChangesAsync(); }
         public async Task DeleteAsync(int id) { var entity = await _context.Flights.FindAsync(id); if (entity != null) { _context.Flights.Remove(entity); await _context.SaveChangesAsync(); } }

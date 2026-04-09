@@ -1,17 +1,7 @@
-﻿using AirlineAPI.Entity;
+using AirlineAPI.Entity;
 using AirlineAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Claims;
-
-
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AirlineAPI.Controllers
@@ -77,7 +67,7 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("flight/{flightId}/occupied-seats")]
-        public async Task<ActionResult<IEnumerable<string>>> GetOccupiedSeats(int flightId)
+        public async Task<ActionResult<IEnumerable<Seat>>> GetOccupiedSeats(int flightId)
         {
             try
             {
@@ -95,7 +85,7 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("flight/{flightId}/available-seats")]
-        public async Task<ActionResult<IEnumerable<string>>> GetAvailableSeats(int flightId)
+        public async Task<ActionResult<IEnumerable<Seat>>> GetAvailableSeats(int flightId)
         {
             try
             {
@@ -115,7 +105,7 @@ namespace AirlineAPI.Controllers
             try
             {
                 var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-                var ticket = await _service.ReserveTicketAsync(request.FlightId, passengerId, request.SeatNumber);
+                var ticket = await _service.ReserveTicketAsync(request.FlightId, passengerId, request.SeatId);
                 return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
             }
             catch (ArgumentException ex)
@@ -183,10 +173,8 @@ namespace AirlineAPI.Controllers
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
-            // Пробуем отменить как оплаченный билет
             var success = await _service.CancelPaidTicketAsync(ticketId, passengerId);
             
-            // Если не получилось, пробуем как резервацию
             if (!success)
             {
                 success = await _service.CancelReservationAsync(ticketId, passengerId);
@@ -210,6 +198,6 @@ namespace AirlineAPI.Controllers
     public class ReserveTicketRequest
     {
         public int FlightId { get; set; }
-        public string SeatNumber { get; set; }
+        public int SeatId { get; set; }
     }
 }
