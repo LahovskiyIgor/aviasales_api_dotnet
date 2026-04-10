@@ -18,6 +18,7 @@ namespace AirlineAPI.Repositories
                 .ThenInclude(a => a.Seats)
             .Include(f => f.Tickets)
                 .ThenInclude(t => t.Seat)
+            .AsSplitQuery()
             .ToListAsync();
         public async Task<Flight> GetByIdAsync(int id) =>
             await _context.Flights
@@ -36,6 +37,7 @@ namespace AirlineAPI.Repositories
                     .ThenInclude(a => a.Seats)
                 .Include(f => f.Tickets)
                     .ThenInclude(t => t.Seat)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(f => f.Id == flightId);
         }
 
@@ -51,6 +53,7 @@ namespace AirlineAPI.Repositories
             return await _context.Flights
                 .Include(f => f.Airplane)
                     .ThenInclude(a => a.Seats)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(f => f.Id == flightId);
         }
 

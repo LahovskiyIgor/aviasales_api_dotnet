@@ -29,6 +29,7 @@ namespace AirlineAPI.Repositories
                 .Include(p => p.Tickets)
                     .ThenInclude(t => t.Flight)
                         .ThenInclude(f => f.Airplane)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == passengerId);
         }
 

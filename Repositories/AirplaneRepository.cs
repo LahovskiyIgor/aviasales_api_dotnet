@@ -21,6 +21,7 @@ namespace AirlineAPI.Repositories
         {
             return await _context.Airplanes
                 .Include(a => a.Flights)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(a => a.Id == airplaneId);
         }
 

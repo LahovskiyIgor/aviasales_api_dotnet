@@ -18,6 +18,7 @@ namespace AirlineAPI.Repositories
             await _context.Tickets
                 .Include(t => t.Seat)
                 .Include(t => t.Flight)
+                .AsSplitQuery()
                 .ToListAsync();
         
         public async Task<Ticket> GetByIdAsync(int id) => 
