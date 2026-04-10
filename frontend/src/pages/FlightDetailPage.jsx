@@ -97,14 +97,8 @@ const FlightDetailPage = () => {
     };
 
     const handlePay = async (ticketId) => {
-        try {
-            await ticketService.payTicket(ticketId);
-            showNotification('Билет успешно оплачен!', 'success');
-            await loadMyTickets();
-        } catch (err) {
-            const message = err.response?.data?.message || 'Не удалось оплатить билет';
-            showNotification(message, 'error');
-        }
+        // Перенаправляем на страницу оплаты
+        navigate(`/checkout/${ticketId}`);
     };
 
     const handleCancel = async (ticketId) => {

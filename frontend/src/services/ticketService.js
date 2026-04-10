@@ -28,8 +28,14 @@ const ticketService = {
         return response.data;
     },
 
-    // Оплатить билет
-    payTicket: async (ticketId) => {
+    // Получить билет по ID
+    getTicketById: async (ticketId) => {
+        const response = await api.get(`/ticket/my/${ticketId}`);
+        return response.data;
+    },
+
+    // Оплатить билет (подтвердить бронирование)
+    confirmBooking: async (ticketId) => {
         const response = await api.post(`/ticket/${ticketId}/pay`);
         return response.data;
     },

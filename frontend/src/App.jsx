@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FlightsPage from './pages/FlightsPage';
 import FlightDetailPage from './pages/FlightDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
+import SuccessPage from './pages/SuccessPage';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -60,6 +62,22 @@ function AppRoutes() {
               element={
                   <ProtectedRoute>
                       <FlightDetailPage />
+                  </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/checkout/:ticketId"
+              element={
+                  <ProtectedRoute>
+                      <CheckoutPage />
+                  </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/success"
+              element={
+                  <ProtectedRoute>
+                      <SuccessPage />
                   </ProtectedRoute>
               }
           />
