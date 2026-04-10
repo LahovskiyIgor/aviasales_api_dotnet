@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import flightService from '../services/flightService';
 import './FlightsPage.css';
 
@@ -90,121 +92,125 @@ const FlightsPage = () => {
   }
 
   return (
-    <div className="flights-page">
-      <h1>Доступные рейсы</h1>
-      
-      <div className="filters-container">
-        <div className="filter-group">
-          <label htmlFor="departure">Откуда:</label>
-          <input
-            id="departure"
-            type="text"
-            placeholder="Город или аэропорт отправления"
-            value={departureAirport}
-            onChange={(e) => setDepartureAirport(e.target.value)}
-          />
+    <div className="flights-page-wrapper">
+      <Header activePage="flights" />
+      <div className="flights-page">
+        <h1>Доступные рейсы</h1>
+        
+        <div className="filters-container">
+          <div className="filter-group">
+            <label htmlFor="departure">Откуда:</label>
+            <input
+              id="departure"
+              type="text"
+              placeholder="Город или аэропорт отправления"
+              value={departureAirport}
+              onChange={(e) => setDepartureAirport(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-group">
+            <label htmlFor="arrival">Куда:</label>
+            <input
+              id="arrival"
+              type="text"
+              placeholder="Город или аэропорт прибытия"
+              value={arrivalAirport}
+              onChange={(e) => setArrivalAirport(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-group">
+            <label htmlFor="date">Дата вылета:</label>
+            <input
+              id="date"
+              type="date"
+              value={departureDate}
+              onChange={(e) => setDepartureDate(e.target.value)}
+            />
+          </div>
+
+          <button className="clear-filters-btn" onClick={clearFilters}>
+            Сбросить фильтры
+          </button>
         </div>
 
-        <div className="filter-group">
-          <label htmlFor="arrival">Куда:</label>
-          <input
-            id="arrival"
-            type="text"
-            placeholder="Город или аэропорт прибытия"
-            value={arrivalAirport}
-            onChange={(e) => setArrivalAirport(e.target.value)}
-          />
-        </div>
+        <div className="flights-list">
+          {filteredFlights.length === 0 ? (
+            <p className="no-flights">Рейсы не найдены</p>
+          ) : (
+            filteredFlights.map(flight => (
+              <div 
+                key={flight.id} 
+                className="flight-card"
+                onClick={() => handleFlightClick(flight.id)}
+              >
+                <div className="flight-header">
+                  <span className="flight-number">{flight.flightNumber}</span>
+                  <span className="airplane-model">{flight.airplane?.model}</span>
+                </div>
+                
+                <div className="flight-route">
+                  <div className="airport departure">
+                    <span className="airport-code">{flight.departureAirport?.name}</span>
+                    <span className="airport-city">{flight.departureAirport?.location}</span>
+                  </div>
+                  <div className="route-arrow">→</div>
+                  <div className="airport arrival">
+                    <span className="airport-code">{flight.arrivalAirport?.name}</span>
+                    <span className="airport-city">{flight.arrivalAirport?.location}</span>
+                  </div>
+                </div>
 
-        <div className="filter-group">
-          <label htmlFor="date">Дата вылета:</label>
-          <input
-            id="date"
-            type="date"
-            value={departureDate}
-            onChange={(e) => setDepartureDate(e.target.value)}
-          />
-        </div>
+                <div className="flight-time">
+                  <div className="departure-time">
+                    <span className="time-label">Вылет:</span>
+                    <span className="time-value">
+                      {new Date(flight.departureTime).toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <div className="arrival-time">
+                    <span className="time-label">Прилёт:</span>
+                    <span className="time-value">
+                      {new Date(flight.arrivalTime).toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                </div>
 
-        <button className="clear-filters-btn" onClick={clearFilters}>
-          Сбросить фильтры
-        </button>
+                <div className="flight-seats">
+                  {(() => {
+                    const stats = getTicketStats(flight);
+                    const availableSeats = flight.totalSeats - stats.soldTickets - stats.reservedTickets;
+                    return (
+                      <>
+                        <span>Всего мест: {flight.totalSeats}</span>
+                        <span>Продано: {stats.soldTickets}</span>
+                        <span>Забронировано: {stats.reservedTickets}</span>
+                        <span className="available-seats">
+                          Доступно: {availableSeats}
+                        </span>
+                      </>
+                    );
+                  })()}
+                </div>
+
+                <button className="select-flight-btn">Выбрать рейс</button>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-
-      <div className="flights-list">
-        {filteredFlights.length === 0 ? (
-          <p className="no-flights">Рейсы не найдены</p>
-        ) : (
-          filteredFlights.map(flight => (
-            <div 
-              key={flight.id} 
-              className="flight-card"
-              onClick={() => handleFlightClick(flight.id)}
-            >
-              <div className="flight-header">
-                <span className="flight-number">{flight.flightNumber}</span>
-                <span className="airplane-model">{flight.airplane?.model}</span>
-              </div>
-              
-              <div className="flight-route">
-                <div className="airport departure">
-                  <span className="airport-code">{flight.departureAirport?.name}</span>
-                  <span className="airport-city">{flight.departureAirport?.location}</span>
-                </div>
-                <div className="route-arrow">→</div>
-                <div className="airport arrival">
-                  <span className="airport-code">{flight.arrivalAirport?.name}</span>
-                  <span className="airport-city">{flight.arrivalAirport?.location}</span>
-                </div>
-              </div>
-
-              <div className="flight-time">
-                <div className="departure-time">
-                  <span className="time-label">Вылет:</span>
-                  <span className="time-value">
-                    {new Date(flight.departureTime).toLocaleString('ru-RU', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </div>
-                <div className="arrival-time">
-                  <span className="time-label">Прилёт:</span>
-                  <span className="time-value">
-                    {new Date(flight.arrivalTime).toLocaleString('ru-RU', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flight-seats">
-                {(() => {
-                  const stats = getTicketStats(flight);
-                  const availableSeats = flight.totalSeats - stats.soldTickets - stats.reservedTickets;
-                  return (
-                    <>
-                      <span>Всего мест: {flight.totalSeats}</span>
-                      <span>Продано: {stats.soldTickets}</span>
-                      <span>Забронировано: {stats.reservedTickets}</span>
-                      <span className="available-seats">
-                        Доступно: {availableSeats}
-                      </span>
-                    </>
-                  );
-                })()}
-              </div>
-
-              <button className="select-flight-btn">Выбрать рейс</button>
-            </div>
-          ))
-        )}
-      </div>
+      <Footer />
     </div>
   );
 };

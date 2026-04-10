@@ -1,7 +1,15 @@
+.flights-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .flights-page {
+  flex: 1;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
 }
 
 .flights-page h1 {
