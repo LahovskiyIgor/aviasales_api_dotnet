@@ -123,7 +123,15 @@ const ProfilePage = () => {
 
         try {
             setCancelLoading(ticketId);
-            await ticketService.cancelTicket(ticketId);
+            const response = await ticketService.cancelTicket(ticketId);
+            
+            // Показываем уведомление о возврате средств если билет был оплачен
+            if (response.data?.refund) {
+                alert(`${response.data.message}\n\n${response.data.refundMessage}`);
+            } else {
+                alert(response.data?.message || 'Резервирование успешно отменено');
+            }
+            
             // Обновляем список билетов
             await loadTickets();
         } catch (err) {
@@ -392,7 +400,7 @@ const ProfilePage = () => {
                                                     onClick={() => handleCancelTicket(ticket.id)}
                                                     disabled={cancelLoading === ticket.id}
                                                 >
-                                                    {cancelLoading === ticket.id ? 'Отмена...' : 'Отмена брони'}
+                                                    {cancelLoading === ticket.id ? 'Отмена...' : (ticket.bookingStatus === 'Оплачен' ? 'Вернуть билет' : 'Отмена брони')}
                                                 </button>
                                             </>
                                         )}
