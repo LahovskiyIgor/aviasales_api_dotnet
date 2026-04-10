@@ -9,6 +9,8 @@ namespace AirlineAPI.Entity
         public string SeatNumber { get; set; } // Например, "12A", "1B"
         public string Sector { get; set; }     // "Эконом", "Бизнес"
 
+        public decimal PriceMultiplier { get; set; } = 1.0m;
+
         public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }
