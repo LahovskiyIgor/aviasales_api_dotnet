@@ -1,6 +1,5 @@
-using AirlineAPI.Entity;
-using AirlineAPI.Interfaces.Repositories;
 using AirlineAPI.Interfaces.Services;
+using AirlineAPI.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirlineAPI.Services
@@ -10,12 +9,14 @@ namespace AirlineAPI.Services
         private readonly ITicketRepository _repository;
         private readonly IFlightRepository _flightRepository;
         private readonly ISeatRepository _seatRepository;
+        private readonly AppDbContext _context;
 
-        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, ISeatRepository seatRepository)
+        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, ISeatRepository seatRepository, AppDbContext context)
         {
             _repository = repository;
             _flightRepository = flightRepository;
             _seatRepository = seatRepository;
+            _context = context;
         }
 
         public Task<IEnumerable<Ticket>> GetAllAsync() => _repository.GetAllAsync();
@@ -169,7 +170,27 @@ namespace AirlineAPI.Services
 
         public async Task CancelExpiredReservationsAsync()
         {
-            await Task.CompletedTask;
+            var expiredTickets = await _context.Tickets
+                .Include(t => t.Flight)
+                .Where(t => t.BookingStatus == "Зарезервирован")
+                .ToListAsync();
+
+            var now = DateTime.UtcNow;
+            
+            foreach (var ticket in expiredTickets)
+            {
+                if (ticket.Flight != null && ticket.Flight.DepartureTime < now.AddMinutes(30))
+                {
+                    ticket.BookingStatus = "Отменен";
+                    
+                    if (ticket.Flight.ReservedTickets > 0)
+                    {
+                        ticket.Flight.ReservedTickets--;
+                    }
+                }
+            }
+            
+            await _context.SaveChangesAsync();
         }
     }
 }
