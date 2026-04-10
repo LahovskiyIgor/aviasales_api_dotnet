@@ -1,42 +1,46 @@
-```
+```gitignore
 # Build artifacts
-*.o
-*.obj
-*.exe
 *.dll
-*.so
-*.a
-*.out
-
-# Dependencies
-packages/
-lib/
+*.exe
+*.pdb
+*.obj
+*.ilk
+*.lib
+*.exp
+*.iobj
+*.ipdb
 bin/
 obj/
 
+# Dependencies
+packages/
+node_modules/
+.nuget/
+.nyc_output/
+coverage/
+
 # Logs
 *.log
+logs/
 
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
 # Editors
 .vscode/
 .idea/
-*.swp
-*.swo
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# OS
+# OS generated files
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Tests
-*.test.dll
+# Testing
 TestResults/
-
-# NuGet
-*.nupkg
-.nuget/
 ```

@@ -60,7 +60,7 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpPut("my")]
-        public async Task<IActionResult> UpdateMyProfile([FromBody] Passenger passenger)
+        public async Task<IActionResult> UpdateMyProfile([FromBody] UpdatePassengerDto passengerDto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
@@ -70,16 +70,20 @@ namespace AirlineAPI.Controllers
             if (existingPassenger == null)
                 return NotFound(new { message = "Профиль пассажира не найден" });
             
-            if (passenger.Id != existingPassenger.Id) 
-                return BadRequest(new { message = "Нельзя обновить профиль другого пользователя" });
+            existingPassenger.FirstName = passengerDto.FirstName;
+            existingPassenger.LastName = passengerDto.LastName;
+            existingPassenger.Email = passengerDto.Email;
+            existingPassenger.Phone = passengerDto.Phone;
             
-            existingPassenger.FirstName = passenger.FirstName;
-            existingPassenger.LastName = passenger.LastName;
-            existingPassenger.Email = passenger.Email;
-            existingPassenger.Phone = passenger.Phone;
-            
-            await _service.UpdateAsync(existingPassenger);
-            return NoContent();
+            try
+            {
+                await _service.UpdateAsync(existingPassenger);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Ошибка при обновлении профиля: {ex.Message}" });
+            }
         }
 
         [Authorize(Roles = "Admin")]
