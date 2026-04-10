@@ -77,7 +77,8 @@ namespace AirlineAPI.Services
                 FlightId = flightId,
                 PassengerId = passengerId,
                 SeatId = seatId,
-                BookingStatus = "Зарезервирован"
+                BookingStatus = "Зарезервирован",
+                ReservedAt = DateTime.UtcNow
             };
 
             await _repository.AddAsync(ticket);
@@ -179,11 +180,18 @@ namespace AirlineAPI.Services
             
             foreach (var ticket in expiredTickets)
             {
-                if (ticket.Flight != null && ticket.Flight.DepartureTime < now.AddMinutes(30))
+                // Отменяем резервирование если прошло больше 10 минут с момента бронирования
+                // ИЛИ если вылет рейса меньше чем через 30 минут
+                bool isTimeExpired = ticket.ReservedAt.HasValue && 
+                                    (now - ticket.ReservedAt.Value).TotalMinutes > 10;
+                bool isFlightSoon = ticket.Flight != null && 
+                                   ticket.Flight.DepartureTime < now.AddMinutes(30);
+                
+                if (isTimeExpired || isFlightSoon)
                 {
                     ticket.BookingStatus = "Отменен";
                     
-                    if (ticket.Flight.ReservedTickets > 0)
+                    if (ticket.Flight != null && ticket.Flight.ReservedTickets > 0)
                     {
                         ticket.Flight.ReservedTickets--;
                     }

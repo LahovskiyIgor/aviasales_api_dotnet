@@ -437,6 +437,38 @@
         color: #721c24;
     }
 
+.ticket-status-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.reservation-timer {
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: #fff3cd;
+    color: #856404;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+    .reservation-timer.expired {
+        background: #f8d7da;
+        color: #721c24;
+        animation: none;
+    }
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
 .ticket-actions {
     display: flex;
     gap: 10px;

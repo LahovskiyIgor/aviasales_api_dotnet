@@ -217,11 +217,19 @@
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 12px;
     color: #666;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .ticket-id {
+    font-weight: 500;
+}
+
+.reservation-date {
+    color: #856404;
     font-weight: 500;
 }
 

@@ -16,11 +16,44 @@ const FlightDetailPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [notification, setNotification] = useState(null);
+    const [reservationTimers, setReservationTimers] = useState({});
 
     useEffect(() => {
         loadFlightDetails();
         loadMyTickets();
     }, [id]);
+
+    // Таймер обновления времени бронирования
+    useEffect(() => {
+        const timer = setInterval(() => {
+            updateReservationTimers();
+        }, 1000);
+        
+        return () => clearInterval(timer);
+    }, [myTickets]);
+
+    const updateReservationTimers = () => {
+        const now = new Date().getTime();
+        const newTimers = {};
+        
+        myTickets.forEach(ticket => {
+            if (ticket.bookingStatus === 'Зарезервирован' && ticket.reservedAt) {
+                const reservedAt = new Date(ticket.reservedAt).getTime();
+                const elapsed = Math.floor((now - reservedAt) / 1000);
+                const remaining = Math.max(0, 600 - elapsed); // 10 минут = 600 секунд
+                
+                if (remaining > 0) {
+                    const minutes = Math.floor(remaining / 60);
+                    const seconds = remaining % 60;
+                    newTimers[ticket.id] = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    newTimers[ticket.id] = 'Истекло';
+                }
+            }
+        });
+        
+        setReservationTimers(newTimers);
+    };
 
     const loadFlightDetails = async () => {
         try {
@@ -331,9 +364,16 @@ const FlightDetailPage = () => {
                                     <div className="ticket-seat">
                                         Место: {ticket.seat?.seatNumber || `#${ticket.seatId}`} ({ticket.seat?.sector || 'N/A'})
                                     </div>
-                                    <span className={`ticket-status ${ticket.bookingStatus.toLowerCase()}`}>
-                                        {ticket.bookingStatus}
-                                    </span>
+                                    <div className="ticket-status-wrapper">
+                                        <span className={`ticket-status ${ticket.bookingStatus.toLowerCase()}`}>
+                                            {ticket.bookingStatus}
+                                        </span>
+                                        {ticket.bookingStatus === 'Зарезервирован' && reservationTimers[ticket.id] && (
+                                            <span className={`reservation-timer ${reservationTimers[ticket.id] === 'Истекло' ? 'expired' : ''}`}>
+                                                ⏱️ Осталось: {reservationTimers[ticket.id]}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="ticket-actions">
                                     {ticket.bookingStatus === 'Зарезервирован' && (

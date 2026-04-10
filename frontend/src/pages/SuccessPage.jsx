@@ -178,6 +178,16 @@ const SuccessPage = () => {
                         <span className="booking-date">
                             Дата покупки: {new Date().toLocaleDateString('ru-RU')}
                         </span>
+                        {ticket.reservedAt && (
+                            <span className="reservation-date">
+                                Забронирован: {new Date(ticket.reservedAt).toLocaleString('ru-RU', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
+                            </span>
+                        )}
                     </div>
                 </div>
 

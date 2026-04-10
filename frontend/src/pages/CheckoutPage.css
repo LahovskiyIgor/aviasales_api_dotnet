@@ -85,6 +85,28 @@
     color: #667eea;
 }
 
+.summary-row .value.time-remaining {
+    color: #856404;
+    font-weight: 700;
+    font-size: 16px;
+    animation: pulse-timer 2s infinite;
+}
+
+.summary-row .value.time-expired {
+    color: #721c24;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+@keyframes pulse-timer {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
 /* Payment Form */
 .payment-form {
     margin-top: 30px;
