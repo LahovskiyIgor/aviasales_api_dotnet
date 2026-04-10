@@ -20,5 +20,6 @@ namespace AirlineAPI.Interfaces.Services
         Task<IEnumerable<Seat>> GetAvailableSeatsAsync(int flightId);
         Task<IEnumerable<Seat>> GetOccupiedSeatsAsync(int flightId);
         Task CancelExpiredReservationsAsync();
+        Task<int?> GetRemainingReservationTimeAsync(int ticketId, int passengerId);
     }
 }

@@ -26,22 +26,20 @@ const CheckoutPage = () => {
     }, [ticketId]);
 
     useEffect(() => {
-        if (!ticket || ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) {
+        if (!ticket || ticket.bookingStatus !== 'Зарезервирован') {
             setReservationTimeLeft(null);
             return;
         }
         
-        const updateTimer = () => {
-            const now = new Date().getTime();
-            const reservedAt = new Date(ticket.reservedAt).getTime();
-            const elapsed = Math.floor((now - reservedAt) / 1000);
-            const remaining = Math.max(0, 600 - elapsed);
+        const updateTimer = async () => {
+            // Получаем актуальное время от сервера
+            const remainingSeconds = await ticketService.getRemainingReservationTime(ticketId);
             
-            if (remaining <= 0) {
+            if (remainingSeconds === null || remainingSeconds <= 0) {
                 setReservationTimeLeft('Истекло');
             } else {
-                const minutes = Math.floor(remaining / 60);
-                const seconds = remaining % 60;
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
                 setReservationTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
             }
         };
@@ -51,7 +49,7 @@ const CheckoutPage = () => {
         const timer = setInterval(updateTimer, 1000);
         
         return () => clearInterval(timer);
-    }, [ticket]);
+    }, [ticket, ticketId]);
 
     const loadTicketInfo = async () => {
         try {

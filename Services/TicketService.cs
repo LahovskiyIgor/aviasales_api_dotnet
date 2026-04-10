@@ -177,6 +177,7 @@ namespace AirlineAPI.Services
                 .ToListAsync();
 
             var now = DateTime.UtcNow;
+            var canceledCount = 0;
             
             foreach (var ticket in expiredTickets)
             {
@@ -195,10 +196,51 @@ namespace AirlineAPI.Services
                     {
                         ticket.Flight.ReservedTickets--;
                     }
+                    
+                    canceledCount++;
                 }
             }
             
             await _context.SaveChangesAsync();
+            
+            if (canceledCount > 0)
+            {
+                _logger.LogInformation($"Отменено {canceledCount} просроченных резервирований");
+            }
+        }
+
+        /// <summary>
+        /// Получить оставшееся время бронирования в секундах для конкретного билета.
+        /// Возвращает null если билет не зарезервирован или уже истёк.
+        /// </summary>
+        public async Task<int?> GetRemainingReservationTimeAsync(int ticketId, int passengerId)
+        {
+            var ticket = await _repository.GetByIdAsync(ticketId);
+            if (ticket == null || ticket.PassengerId != passengerId)
+                return null;
+
+            if (ticket.BookingStatus != "Зарезервирован" || !ticket.ReservedAt.HasValue)
+                return null;
+
+            var now = DateTime.UtcNow;
+            var elapsed = (now - ticket.ReservedAt.Value).TotalSeconds;
+            var remaining = 600 - elapsed; // 10 минут = 600 секунд
+
+            if (remaining <= 0)
+                return 0;
+
+            // Также проверяем время до вылета
+            if (ticket.Flight != null)
+            {
+                var timeToDeparture = (ticket.Flight.DepartureTime - now).TotalMinutes;
+                if (timeToDeparture < 30)
+                {
+                    // Если до вылета меньше 30 минут, резервирование скоро будет отменено
+                    return Math.Max(0, (int)(timeToDeparture * 60));
+                }
+            }
+
+            return (int)remaining;
         }
     }
 }
