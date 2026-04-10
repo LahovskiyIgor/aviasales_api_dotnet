@@ -23,36 +23,48 @@ const FlightDetailPage = () => {
         loadMyTickets();
     }, [id]);
 
-    // Таймер обновления времени бронирования
+    // Таймер обновления времени бронирования и проверки истечения резервирования
     useEffect(() => {
-        const timer = setInterval(() => {
-            updateReservationTimers();
+        const timer = setInterval(async () => {
+            await updateReservationTimers();
+            await checkExpiredReservations();
         }, 1000);
-        
-        return () => clearInterval(timer);
-    }, [myTickets]);
 
-    const updateReservationTimers = () => {
-        const now = new Date().getTime();
+        return () => clearInterval(timer);
+    }, [myTickets, reservationTimers]);
+
+    const updateReservationTimers = async () => {
         const newTimers = {};
-        
-        myTickets.forEach(ticket => {
-            if (ticket.bookingStatus === 'Зарезервирован' && ticket.reservedAt) {
-                const reservedAt = new Date(ticket.reservedAt).getTime();
-                const elapsed = Math.floor((now - reservedAt) / 1000);
-                const remaining = Math.max(0, 600 - elapsed); // 10 минут = 600 секунд
-                
-                if (remaining > 0) {
-                    const minutes = Math.floor(remaining / 60);
-                    const seconds = remaining % 60;
-                    newTimers[ticket.id] = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                } else {
+
+        for (const ticket of myTickets) {
+            if (ticket.bookingStatus === 'Зарезервирован') {
+                // Получаем актуальное время от сервера
+                const remainingSeconds = await ticketService.getRemainingReservationTime(ticket.id);
+
+                if (remainingSeconds === null || remainingSeconds <= 0) {
                     newTimers[ticket.id] = 'Истекло';
+                } else {
+                    const minutes = Math.floor(remainingSeconds / 60);
+                    const seconds = remainingSeconds % 60;
+                    newTimers[ticket.id] = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 }
             }
-        });
-        
+        }
+
         setReservationTimers(newTimers);
+    };
+
+    const checkExpiredReservations = async () => {
+        // Проверяем, есть ли билеты со статусом "Истекло"
+        const expiredTicketIds = Object.entries(reservationTimers)
+            .filter(([_, time]) => time === 'Истекло')
+            .map(([id]) => parseInt(id));
+
+        if (expiredTicketIds.length > 0) {
+            // Обновляем список билетов, чтобы убрать истёкшие
+            await loadMyTickets();
+            await loadFlightDetails();
+        }
     };
 
     const loadFlightDetails = async () => {
@@ -358,7 +370,14 @@ const FlightDetailPage = () => {
                 <div className="my-tickets-section">
                     <h2>Мои билеты на этот рейс</h2>
                     <div className="tickets-list">
-                        {myTickets.map(ticket => (
+                        {myTickets.map(ticket => {
+                            // Пропускаем отменённые билеты и билеты с истёкшим временем
+                            const isExpired = reservationTimers[ticket.id] === 'Истекло';
+                            if (ticket.bookingStatus === 'Отменен' || isExpired) {
+                                return null;
+                            }
+                            
+                            return (
                             <div key={ticket.id} className="ticket-card">
                                 <div className="ticket-info">
                                     <div className="ticket-seat">
@@ -402,7 +421,8 @@ const FlightDetailPage = () => {
                                     )}
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             )}

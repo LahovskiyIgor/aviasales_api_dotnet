@@ -34,6 +34,17 @@ const ticketService = {
         return response.data;
     },
 
+    // Получить оставшееся время бронирования в секундах
+    getRemainingReservationTime: async (ticketId) => {
+        try {
+            const response = await api.get(`/ticket/my/${ticketId}/remaining-time`);
+            return response.data;
+        } catch (error) {
+            // Если время истекло или билет не найден, возвращаем null
+            return null;
+        }
+    },
+
     // Оплатить билет (подтвердить бронирование)
     confirmBooking: async (ticketId) => {
         const response = await api.post(`/ticket/${ticketId}/pay`);

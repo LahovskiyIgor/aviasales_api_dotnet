@@ -37,6 +37,19 @@ namespace AirlineAPI.Controllers
             return Ok(entity.ToDto());
         }
 
+        [Authorize]
+        [HttpGet("my/{id}/remaining-time")]
+        public async Task<ActionResult<int?>> GetRemainingReservationTime(int id)
+        {
+            var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var remainingSeconds = await _service.GetRemainingReservationTimeAsync(id, passengerId);
+            
+            if (remainingSeconds == null)
+                return NotFound(new { message = "Билет не найден или не принадлежит вам" });
+            
+            return Ok(remainingSeconds);
+        }
+
         /// <summary>
         /// Получить билет по ID. Доступно администратору или владельцу билета.
         /// </summary>
