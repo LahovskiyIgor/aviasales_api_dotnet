@@ -17,7 +17,6 @@ namespace AirlineAPI.Repositories
         public async Task<IEnumerable<Ticket>> GetAllWithDetailsAsync() => 
             await _context.Tickets
                 .Include(t => t.Seat)
-                .Include(t => t.Flight)
                 .ToListAsync();
         
         public async Task<Ticket> GetByIdAsync(int id) => 

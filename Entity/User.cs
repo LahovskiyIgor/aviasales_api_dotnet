@@ -11,6 +11,7 @@ namespace AirlineAPI.Entity
         
         // Связь с пассажиром (один пользователь может иметь одного пассажира)
         
+        [JsonIgnore]
         public Passenger? Passenger { get; set; }
     }
 

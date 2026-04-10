@@ -13,6 +13,7 @@ namespace AirlineAPI.Entity
         // Внешний ключ на таблицу Users
         public int UserId { get; set; }
         
+        [JsonIgnore]
         public User? User { get; set; }
 
         [JsonIgnore]

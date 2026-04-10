@@ -142,13 +142,15 @@ namespace AirlineAPI.Services
             if (flight.Airplane == null)
                 throw new ArgumentException("Данные о самолёте недоступны");
 
-            // Получаем все места самолета напрямую из контекста
+            // Получаем все места самолета напрямую из контекста с данными о билетах
             var allSeats = await _context.Seats
                 .Where(s => s.AirplaneId == flight.AirplaneId)
+                .Include(s => s.Tickets)
                 .ToListAsync();
             
             // Получаем ID занятых мест
-            var occupiedSeatIds = (await _repository.GetAllAsync())
+            var occupiedSeatIds = allSeats
+                .SelectMany(s => s.Tickets)
                 .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
                 .Select(t => t.SeatId)
                 .ToHashSet();
@@ -165,13 +167,15 @@ namespace AirlineAPI.Services
             if (flight.Airplane == null)
                 throw new ArgumentException("Данные о самолёте недоступны");
 
-            // Получаем все места самолета напрямую из контекста
+            // Получаем все места самолета напрямую из контекста с данными о билетах
             var allSeats = await _context.Seats
                 .Where(s => s.AirplaneId == flight.AirplaneId)
+                .Include(s => s.Tickets)
                 .ToListAsync();
             
             // Получаем ID занятых мест
-            var occupiedSeatIds = (await _repository.GetAllAsync())
+            var occupiedSeatIds = allSeats
+                .SelectMany(s => s.Tickets)
                 .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
                 .Select(t => t.SeatId)
                 .ToHashSet();

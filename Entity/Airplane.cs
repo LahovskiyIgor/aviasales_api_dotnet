@@ -11,6 +11,7 @@ namespace AirlineAPI.Entity
         [JsonIgnore]
         public ICollection<Flight> Flights { get; set; } = new List<Flight>();
         
+        [JsonIgnore]
         public ICollection<Seat> Seats { get; set; } = new List<Seat>();
     }
 }
