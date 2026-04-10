@@ -7,6 +7,18 @@ namespace AirlineAPI.DTOs
         public string Location { get; set; } = null!;
     }
 
+    public class CreateAirportDto
+    {
+        public string Name { get; set; } = null!;
+        public string Location { get; set; } = null!;
+    }
+
+    public class UpdateAirportDto
+    {
+        public string Name { get; set; } = null!;
+        public string Location { get; set; } = null!;
+    }
+
     public class AirportWithFlightsDto
     {
         public int Id { get; set; }

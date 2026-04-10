@@ -76,8 +76,8 @@ const AdminAirportsPage = () => {
     e.preventDefault();
 
     const payload = {
-      ...formData,
-      id: editingAirport?.id
+      name: formData.name,
+      location: formData.location
     };
 
     try {

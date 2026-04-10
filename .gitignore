@@ -1,26 +1,26 @@
 ```
 # Build artifacts
-*.o
-*.obj
-*.exe
+bin/
+obj/
 *.dll
-*.so
-*.a
-*.out
+*.exe
+*.pdb
+*.config
+*.manifest
+*.nupkg
 
 # Dependencies
 packages/
-lib/
-bin/
-obj/
+node_modules/
 
 # Logs
 *.log
+logs/
 
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
 # Editors
 .vscode/
@@ -28,15 +28,12 @@ obj/
 *.swp
 *.swo
 
-# OS
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Tests
-*.test.dll
-TestResults/
-
-# NuGet
-*.nupkg
-.nuget/
+# Test coverage
+coverage/
+htmlcov/
+*.coverage
 ```
