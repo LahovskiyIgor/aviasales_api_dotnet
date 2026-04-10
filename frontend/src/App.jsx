@@ -8,6 +8,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import SuccessPage from './pages/SuccessPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminFlightsPage from './pages/AdminFlightsPage';
+import AdminAirplanesPage from './pages/AdminAirplanesPage';
+import AdminAirportsPage from './pages/AdminAirportsPage';
 import AdminRoute from './components/AdminRoute';
 import './App.css';
 
@@ -118,6 +120,22 @@ function AppRoutes() {
               element={
                   <AdminRoute>
                       <AdminFlightsPage />
+                  </AdminRoute>
+              }
+          />
+          <Route
+              path="/admin/airplanes"
+              element={
+                  <AdminRoute>
+                      <AdminAirplanesPage />
+                  </AdminRoute>
+              }
+          />
+          <Route
+              path="/admin/airports"
+              element={
+                  <AdminRoute>
+                      <AdminAirportsPage />
                   </AdminRoute>
               }
           />
