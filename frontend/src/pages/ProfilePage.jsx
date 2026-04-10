@@ -342,7 +342,8 @@ const ProfilePage = () => {
                                         </span>
                                     </div>
                                     
-                                    <div className="ticket-route">
+                                    <div className="ticket-body">
+                                        <div className="ticket-route">
                                         <div className="route-point">
                                             <span className="airport-code">{ticket.flight?.departureAirport?.name}</span>
                                             <span className="airport-city">{ticket.flight?.departureAirport?.location}</span>
@@ -404,6 +405,7 @@ const ProfilePage = () => {
                                                 </button>
                                             </>
                                         )}
+                                    </div>
                                     </div>
                                 </div>
                             ))
