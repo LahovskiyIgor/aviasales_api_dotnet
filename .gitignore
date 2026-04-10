@@ -6,12 +6,10 @@ obj/
 *.exe
 *.pdb
 *.config
-*.runtimeconfig.json
 
 # Dependencies
-packages/
 node_modules/
-.nuget/
+packages/
 
 # Logs
 *.log
@@ -23,10 +21,9 @@ node_modules/
 
 # Editors
 .vscode/
-.vs/
 .idea/
-*.swp
-*.swo
+*.userprefs
+*.user
 
 # OS
 .DS_Store
@@ -39,5 +36,5 @@ htmlcov/
 
 # Temporary files
 *.tmp
-*~
+*.temp
 ```

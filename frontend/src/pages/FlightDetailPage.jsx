@@ -36,6 +36,16 @@ const FlightDetailPage = () => {
             const occupiedSeats = await ticketService.getOccupiedSeats(id);
             const occupiedIds = new Set(occupiedSeats.map(s => s.id));
             setOccupiedSeatIds(occupiedIds);
+            
+            // Подсчитываем проданные и забронированные билеты на основе данных о билетах
+            const tickets = flightData.tickets || [];
+            const soldCount = tickets.filter(t => t.bookingStatus === 'Оплачен').length;
+            const reservedCount = tickets.filter(t => t.bookingStatus === 'Зарезервирован').length;
+            setFlight(prev => ({
+                ...prev,
+                soldTickets: soldCount,
+                reservedTickets: reservedCount
+            }));
         } catch (err) {
             setError('Не удалось загрузить информацию о рейсе');
             console.error(err);
@@ -311,7 +321,7 @@ const FlightDetailPage = () => {
                             <div key={ticket.id} className="ticket-card">
                                 <div className="ticket-info">
                                     <div className="ticket-seat">
-                                        Место: {ticket.seat?.seatNumber || `#${ticket.seatId}`} ({ticket.seat?.sector})
+                                        Место: {ticket.seat?.seatNumber || `#${ticket.seatId}`} ({ticket.seat?.sector || 'N/A'})
                                     </div>
                                     <span className={`ticket-status ${ticket.bookingStatus.toLowerCase()}`}>
                                         {ticket.bookingStatus}

@@ -37,6 +37,14 @@ const FlightsPage = () => {
     }
   };
 
+  // Подсчитывает количество проданных и забронированных билетов на основе данных о билетах
+  const getTicketStats = (flight) => {
+    const tickets = flight.tickets || [];
+    const soldTickets = tickets.filter(t => t.bookingStatus === 'Оплачен').length;
+    const reservedTickets = tickets.filter(t => t.bookingStatus === 'Зарезервирован').length;
+    return { soldTickets, reservedTickets };
+  };
+
   const applyFilters = () => {
     let result = [...flights];
 
@@ -177,12 +185,20 @@ const FlightsPage = () => {
               </div>
 
               <div className="flight-seats">
-                <span>Всего мест: {flight.totalSeats}</span>
-                <span>Продано: {flight.soldTickets}</span>
-                <span>Забронировано: {flight.reservedTickets}</span>
-                <span className="available-seats">
-                  Доступно: {flight.totalSeats - flight.soldTickets - flight.reservedTickets}
-                </span>
+                {(() => {
+                  const stats = getTicketStats(flight);
+                  const availableSeats = flight.totalSeats - stats.soldTickets - stats.reservedTickets;
+                  return (
+                    <>
+                      <span>Всего мест: {flight.totalSeats}</span>
+                      <span>Продано: {stats.soldTickets}</span>
+                      <span>Забронировано: {stats.reservedTickets}</span>
+                      <span className="available-seats">
+                        Доступно: {availableSeats}
+                      </span>
+                    </>
+                  );
+                })()}
               </div>
 
               <button className="select-flight-btn">Выбрать рейс</button>
