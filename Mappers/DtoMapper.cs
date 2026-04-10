@@ -82,7 +82,8 @@ namespace AirlineAPI.Mappers
             TotalSeats = flight.TotalSeats,
             SoldTickets = flight.SoldTickets,
             ReservedTickets = flight.ReservedTickets,
-            Tickets = flight.Tickets?.Select(t => t.ToShortDto()).ToList() ?? new()
+            Tickets = flight.Tickets?.Select(t => t.ToShortDto()).ToList() ?? new(),
+            Seats = flight.Airplane?.Seats?.Select(s => s.ToDto()).ToList() ?? new()
         };
 
         // Seat mappings

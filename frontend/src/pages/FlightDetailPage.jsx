@@ -28,8 +28,8 @@ const FlightDetailPage = () => {
             const flightData = await flightService.getDetails(id);
             setFlight(flightData);
 
-            // Загружаем все места самолета
-            const allSeats = flightData.airplane?.seats || [];
+            // Загружаем все места самолета из нового поля seats в FlightDetailsDto
+            const allSeats = flightData.seats || [];
             setSeats(allSeats);
 
             // Загружаем занятые места
