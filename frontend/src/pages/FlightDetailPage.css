@@ -363,8 +363,13 @@
     color: white;
 }
 
-    .pay-btn:hover {
+    .pay-btn:hover:not(:disabled) {
         background: #218838;
+    }
+    
+    .pay-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
     }
 
 .cancel-btn {
@@ -372,8 +377,13 @@
     color: white;
 }
 
-    .cancel-btn:hover {
+    .cancel-btn:hover:not(:disabled) {
         background: #c82333;
+    }
+    
+    .cancel-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
     }
 
 .my-tickets-section {

@@ -7,7 +7,7 @@ namespace AirlineAPI.BackgroundServices
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ReservationCleanupService> _logger;
-        private readonly TimeSpan _cleanupInterval = TimeSpan.FromMinutes(5);
+        private readonly TimeSpan _cleanupInterval = TimeSpan.FromMinutes(1);
 
         public ReservationCleanupService(
             IServiceProvider serviceProvider,
@@ -50,6 +50,14 @@ namespace AirlineAPI.BackgroundServices
             await ticketService.CancelExpiredReservationsAsync();
             
             _logger.LogInformation("Проверка просроченных резервирований завершена");
+        }
+
+        /// <summary>
+        /// Принудительная очистка expired резервирований (для отладки)
+        /// </summary>
+        public async Task ForceCleanupAsync()
+        {
+            await CleanupExpiredReservations();
         }
     }
 }

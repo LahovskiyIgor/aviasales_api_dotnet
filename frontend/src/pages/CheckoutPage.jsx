@@ -280,7 +280,7 @@ const CheckoutPage = () => {
                     <button 
                         className="pay-button" 
                         onClick={handlePay}
-                        disabled={processing}
+                        disabled={processing || reservationTimeLeft === 'Истекло'}
                     >
                         {processing ? 'Обработка...' : `Оплатить ${calculatedPrice} ₽`}
                     </button>
