@@ -192,15 +192,29 @@ namespace AirlineAPI.Controllers
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
+            // Сначала пробуем отменить оплаченный билет
             var success = await _service.CancelPaidTicketAsync(ticketId, passengerId);
             
-            if (!success)
-            {
-                success = await _service.CancelReservationAsync(ticketId, passengerId);
-            }
-
             if (success)
-                return Ok(new { message = "Билет успешно отменен" });
+            {
+                return Ok(new { 
+                    message = "Билет успешно отменен",
+                    refund = true,
+                    refundMessage = "Средства будут возвращены в течение 5 рабочих дней"
+                });
+            }
+            
+            // Если не оплаченный, пробуем отменить резервирование
+            success = await _service.CancelReservationAsync(ticketId, passengerId);
+            
+            if (success)
+            {
+                return Ok(new { 
+                    message = "Резервирование успешно отменено",
+                    refund = false
+                });
+            }
+            
             return Forbid();
         }
 
