@@ -23,6 +23,7 @@ node_modules/
 
 # Editors
 .vscode/
+.vs/
 .idea/
 *.swp
 *.swo

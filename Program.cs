@@ -10,6 +10,7 @@ using AirlineAPI.Data;
 using System.Text.Json.Serialization;
 using AirlineAPI.BackgroundServices;
 using Microsoft.OpenApi.Models;
+using AirlineAPI.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

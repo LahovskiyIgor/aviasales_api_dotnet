@@ -4,6 +4,7 @@ using AirlineAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirlineAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260316052351_sync")]
+    partial class sync
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,32 +148,6 @@ namespace AirlineAPI.Migrations
                     b.ToTable("Passengers");
                 });
 
-            modelBuilder.Entity("AirlineAPI.Entity.Seat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AirplaneId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SeatNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sector")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AirplaneId");
-
-                    b.ToTable("Seats");
-                });
-
             modelBuilder.Entity("AirlineAPI.Entity.Ticket", b =>
                 {
                     b.Property<int>("Id")
@@ -189,16 +166,15 @@ namespace AirlineAPI.Migrations
                     b.Property<int>("PassengerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
+                    b.Property<string>("SeatNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FlightId");
 
                     b.HasIndex("PassengerId");
-
-                    b.HasIndex("SeatId");
 
                     b.ToTable("Tickets");
                 });
@@ -266,17 +242,6 @@ namespace AirlineAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AirlineAPI.Entity.Seat", b =>
-                {
-                    b.HasOne("AirlineAPI.Entity.Airplane", "Airplane")
-                        .WithMany("Seats")
-                        .HasForeignKey("AirplaneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Airplane");
-                });
-
             modelBuilder.Entity("AirlineAPI.Entity.Ticket", b =>
                 {
                     b.HasOne("AirlineAPI.Entity.Flight", "Flight")
@@ -291,24 +256,14 @@ namespace AirlineAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AirlineAPI.Entity.Seat", "Seat")
-                        .WithMany("Tickets")
-                        .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Flight");
 
                     b.Navigation("Passenger");
-
-                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("AirlineAPI.Entity.Airplane", b =>
                 {
                     b.Navigation("Flights");
-
-                    b.Navigation("Seats");
                 });
 
             modelBuilder.Entity("AirlineAPI.Entity.AirportEntity", b =>
@@ -324,11 +279,6 @@ namespace AirlineAPI.Migrations
                 });
 
             modelBuilder.Entity("AirlineAPI.Entity.Passenger", b =>
-                {
-                    b.Navigation("Tickets");
-                });
-
-            modelBuilder.Entity("AirlineAPI.Entity.Seat", b =>
                 {
                     b.Navigation("Tickets");
                 });

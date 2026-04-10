@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FlightsPage from './pages/FlightsPage';
+import FlightDetailPage from './pages/FlightDetailPage';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -53,7 +54,15 @@ function AppRoutes() {
             <FlightsPage />
           </ProtectedRoute>
         }
-      />
+          />
+          <Route
+              path="/flights/:id"
+              element={
+                  <ProtectedRoute>
+                      <FlightDetailPage />
+                  </ProtectedRoute>
+              }
+          />
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
