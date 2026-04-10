@@ -9,12 +9,10 @@ namespace AirlineAPI.Entity
 
         public int DepartureAirportId { get; set; }
         
-        [JsonIgnore]
         public AirportEntity DepartureAirport { get; set; }
 
         public int ArrivalAirportId { get; set; }
         
-        [JsonIgnore]
         public AirportEntity ArrivalAirport { get; set; }
 
         public DateTime DepartureTime { get; set; }
@@ -22,7 +20,6 @@ namespace AirlineAPI.Entity
 
         public int AirplaneId { get; set; }
         
-        [JsonIgnore]
         public Airplane Airplane { get; set; }
 
         public int TotalSeats { get; set; }

@@ -1,64 +1,40 @@
-# Compiled and build artifacts
-*.o
-*.obj
-*.exe
+```csharp
+# Build results
+[Bb]in/
+[Oo]bj/
 *.dll
-*.so
-*.a
-*.out
+*.exe
+*.pdb
+*.userprefs
+
+# Visual Studio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
 
 # Dependencies
 packages/
-lib/
-bin/
-obj/
-
-# Logs and temp files
-*.log
-*.tmp
-*.swp
+node_modules/
 
 # Environment
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
-*.userprefs
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Build outputs
-Debug/
-Release/
-Build/
-Output/
-*.user
-
-# Visual Studio Code specific
-.vs/
-*.suo
-*.userosscache
-*.userprefs
-
-# Unity specific (if applicable)
-Library/
-Temp/
-Obj/
-Logs/
-MemoryCaptures/
-Build/
-*.pidb
-*.pdb
-*.meta
-*.unitypackage
-[assemply-unitypackage]
-Assets/AssetStoreTools*
-
-# Visual Studio specific
-[vsext_Unity_]*
-UserSettings/
-.vsconfig
-.vs/
-*.VC.db
-*.VC.VC.opendb
+# Testing
+TestResults/
+```

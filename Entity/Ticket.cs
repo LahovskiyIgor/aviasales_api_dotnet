@@ -13,12 +13,10 @@ namespace AirlineAPI.Entity
 
         public int PassengerId { get; set; }
         
-        [JsonIgnore]
         public Passenger Passenger { get; set; }
 
         public int SeatId { get; set; }
         
-        [JsonIgnore]
         public Seat Seat { get; set; }
 
         public string BookingStatus { get; set; } = "Оплачен"; // Значение по умолчанию: Зарезервирован, Оплачен, Отменен

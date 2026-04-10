@@ -10,12 +10,14 @@ namespace AirlineAPI.Services
         private readonly ITicketRepository _repository;
         private readonly IFlightRepository _flightRepository;
         private readonly ISeatRepository _seatRepository;
+        private readonly AppDbContext _context;
 
-        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, ISeatRepository seatRepository)
+        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, ISeatRepository seatRepository, AppDbContext context)
         {
             _repository = repository;
             _flightRepository = flightRepository;
             _seatRepository = seatRepository;
+            _context = context;
         }
 
         public Task<IEnumerable<Ticket>> GetAllAsync() => _repository.GetAllAsync();
@@ -140,7 +142,12 @@ namespace AirlineAPI.Services
             if (flight.Airplane == null)
                 throw new ArgumentException("Данные о самолёте недоступны");
 
-            var allSeats = flight.Airplane.Seats;
+            // Получаем все места самолета напрямую из контекста
+            var allSeats = await _context.Seats
+                .Where(s => s.AirplaneId == flight.AirplaneId)
+                .ToListAsync();
+            
+            // Получаем ID занятых мест
             var occupiedSeatIds = (await _repository.GetAllAsync())
                 .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
                 .Select(t => t.SeatId)
@@ -158,7 +165,12 @@ namespace AirlineAPI.Services
             if (flight.Airplane == null)
                 throw new ArgumentException("Данные о самолёте недоступны");
 
-            var allSeats = flight.Airplane.Seats;
+            // Получаем все места самолета напрямую из контекста
+            var allSeats = await _context.Seats
+                .Where(s => s.AirplaneId == flight.AirplaneId)
+                .ToListAsync();
+            
+            // Получаем ID занятых мест
             var occupiedSeatIds = (await _repository.GetAllAsync())
                 .Where(t => t.FlightId == flightId && t.BookingStatus is "Зарезервирован" or "Оплачен")
                 .Select(t => t.SeatId)
