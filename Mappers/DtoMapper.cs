@@ -116,7 +116,8 @@ namespace AirlineAPI.Mappers
             PassengerId = ticket.PassengerId,
             SeatId = ticket.SeatId,
             BookingStatus = ticket.BookingStatus,
-            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0
+            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0,
+            ReservedAt = ticket.ReservedAt
         };
 
         public static TicketDto ToDto(this Ticket ticket) => new()
@@ -129,7 +130,8 @@ namespace AirlineAPI.Mappers
             SeatId = ticket.SeatId,
             Seat = ticket.Seat?.ToDto(),
             BookingStatus = ticket.BookingStatus,
-            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0
+            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0,
+            ReservedAt = ticket.ReservedAt
         };
 
         public static TicketDetailsDto ToDetailsDto(this Ticket ticket) => new()
@@ -142,7 +144,8 @@ namespace AirlineAPI.Mappers
             SeatId = ticket.SeatId,
             Seat = ticket.Seat?.ToDto(),
             BookingStatus = ticket.BookingStatus,
-            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0
+            CalculatedPrice = ticket.Flight?.BasePrice * ticket.Seat?.PriceMultiplier ?? 0,
+            ReservedAt = ticket.ReservedAt
         };
 
         // Passenger mappings
