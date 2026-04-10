@@ -7,6 +7,7 @@ import FlightDetailPage from './pages/FlightDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SuccessPage from './pages/SuccessPage';
 import ProfilePage from './pages/ProfilePage';
+import AdminFlightsPage from './pages/AdminFlightsPage';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -31,6 +32,25 @@ const PublicRoute = ({ children }) => {
   return !isAuthenticated ? children : <Navigate to="/flights" />;
 };
 
+// Компонент для маршрутизации на основе роли
+const RoleBasedRoute = () => {
+  const { isAdmin, isPassenger, loading } = useAuth();
+
+  if (loading) {
+    return <div className="loading">Загрузка...</div>;
+  }
+
+  if (isAdmin) {
+    return <Navigate to="/admin/flights" />;
+  }
+
+  if (isPassenger) {
+    return <Navigate to="/flights" />;
+  }
+
+  return <Navigate to="/login" />;
+};
+
 function AppRoutes() {
   return (
     <Routes>
@@ -49,6 +69,10 @@ function AppRoutes() {
             <RegisterPage />
           </PublicRoute>
         }
+      />
+      <Route
+        path="/"
+        element={<RoleBasedRoute />}
       />
       <Route
         path="/flights"
@@ -90,7 +114,14 @@ function AppRoutes() {
                   </ProtectedRoute>
               }
           />
-      <Route path="/" element={<Navigate to="/login" />} />
+          <Route
+              path="/admin/flights"
+              element={
+                  <ProtectedRoute>
+                      <AdminFlightsPage />
+                  </ProtectedRoute>
+              }
+          />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
