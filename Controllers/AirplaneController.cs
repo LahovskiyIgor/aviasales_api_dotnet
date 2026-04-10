@@ -49,7 +49,7 @@ namespace AirlineAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Airplane airplane)
         {
-            await _service.AddAsync(airplane);
+            await _service.AddWithSeatsAsync(airplane);
             return CreatedAtAction(nameof(GetById), new { id = airplane.Id }, airplane.ToDto());
         }
 
