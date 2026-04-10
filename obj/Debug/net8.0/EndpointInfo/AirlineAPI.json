@@ -19,7 +19,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Airplane"
+                    "$ref": "#/components/schemas/AirplaneDto"
                   }
                 }
               },
@@ -27,7 +27,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Airplane"
+                    "$ref": "#/components/schemas/AirplaneDto"
                   }
                 }
               },
@@ -35,7 +35,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Airplane"
+                    "$ref": "#/components/schemas/AirplaneDto"
                   }
                 }
               }
@@ -95,17 +95,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Airplane"
+                  "$ref": "#/components/schemas/AirplaneDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Airplane"
+                  "$ref": "#/components/schemas/AirplaneDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Airplane"
+                  "$ref": "#/components/schemas/AirplaneDto"
                 }
               }
             }
@@ -210,7 +210,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AirportEntity"
+                    "$ref": "#/components/schemas/AirportDto"
                   }
                 }
               },
@@ -218,7 +218,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AirportEntity"
+                    "$ref": "#/components/schemas/AirportDto"
                   }
                 }
               },
@@ -226,7 +226,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AirportEntity"
+                    "$ref": "#/components/schemas/AirportDto"
                   }
                 }
               }
@@ -286,17 +286,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AirportEntity"
+                  "$ref": "#/components/schemas/AirportDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AirportEntity"
+                  "$ref": "#/components/schemas/AirportDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AirportEntity"
+                  "$ref": "#/components/schemas/AirportDto"
                 }
               }
             }
@@ -469,7 +469,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Flight"
+                    "$ref": "#/components/schemas/FlightDto"
                   }
                 }
               },
@@ -477,7 +477,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Flight"
+                    "$ref": "#/components/schemas/FlightDto"
                   }
                 }
               },
@@ -485,7 +485,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Flight"
+                    "$ref": "#/components/schemas/FlightDto"
                   }
                 }
               }
@@ -545,17 +545,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Flight"
+                  "$ref": "#/components/schemas/FlightDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Flight"
+                  "$ref": "#/components/schemas/FlightDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Flight"
+                  "$ref": "#/components/schemas/FlightDto"
                 }
               }
             }
@@ -660,7 +660,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Passenger"
+                    "$ref": "#/components/schemas/PassengerDto"
                   }
                 }
               },
@@ -668,7 +668,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Passenger"
+                    "$ref": "#/components/schemas/PassengerDto"
                   }
                 }
               },
@@ -676,7 +676,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Passenger"
+                    "$ref": "#/components/schemas/PassengerDto"
                   }
                 }
               }
@@ -736,17 +736,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               }
             }
@@ -826,17 +826,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Passenger"
+                  "$ref": "#/components/schemas/PassengerDto"
                 }
               }
             }
@@ -1126,7 +1126,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               },
@@ -1134,7 +1134,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               },
@@ -1142,7 +1142,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               }
@@ -1202,17 +1202,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               }
             }
@@ -1281,6 +1281,49 @@
         }
       }
     },
+    "/api/Ticket/my/{id}/remaining-time": {
+      "get": {
+        "tags": [
+          "Ticket"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Ticket/my/{id}": {
       "get": {
         "tags": [
@@ -1303,17 +1346,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ticket"
+                  "$ref": "#/components/schemas/TicketDto"
                 }
               }
             }
@@ -1334,7 +1377,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               },
@@ -1342,7 +1385,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               },
@@ -1350,7 +1393,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Ticket"
+                    "$ref": "#/components/schemas/TicketDto"
                   }
                 }
               }
@@ -1383,7 +1426,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               },
@@ -1391,7 +1434,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               },
@@ -1399,7 +1442,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               }
@@ -1432,7 +1475,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               },
@@ -1440,7 +1483,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               },
@@ -1448,7 +1491,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Seat"
+                    "$ref": "#/components/schemas/SeatDto"
                   }
                 }
               }
@@ -1643,6 +1686,42 @@
         },
         "additionalProperties": false
       },
+      "AirplaneDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AirportDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AirportEntity": {
         "type": "object",
         "properties": {
@@ -1771,12 +1850,118 @@
             "type": "integer",
             "format": "int32"
           },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          },
           "tickets": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Ticket"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FlightDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flightNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "departureAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departureAirport": {
+            "$ref": "#/components/schemas/AirportDto"
+          },
+          "arrivalAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "arrivalAirport": {
+            "$ref": "#/components/schemas/AirportDto"
+          },
+          "departureTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "airplaneId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "airplane": {
+            "$ref": "#/components/schemas/AirplaneDto"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "soldTickets": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reservedTickets": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FlightShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flightNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "departureTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "departureAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departureAirport": {
+            "$ref": "#/components/schemas/AirportDto"
+          },
+          "arrivalAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "arrivalAirport": {
+            "$ref": "#/components/schemas/AirportDto"
+          },
+          "airplaneId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "airplane": {
+            "$ref": "#/components/schemas/AirplaneDto"
           }
         },
         "additionalProperties": false
@@ -1835,6 +2020,36 @@
         },
         "additionalProperties": false
       },
+      "PassengerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "PassengerInfo": {
         "type": "object",
         "properties": {
@@ -1855,6 +2070,24 @@
             "nullable": true
           },
           "phone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PassengerShortDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
             "type": "string",
             "nullable": true
           }
@@ -1931,12 +2164,42 @@
             "type": "string",
             "nullable": true
           },
+          "priceMultiplier": {
+            "type": "number",
+            "format": "double"
+          },
           "tickets": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Ticket"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeatDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "airplaneId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seatNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "sector": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceMultiplier": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -1971,6 +2234,55 @@
           },
           "bookingStatus": {
             "type": "string",
+            "nullable": true
+          },
+          "reservedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TicketDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flightId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flight": {
+            "$ref": "#/components/schemas/FlightShortDto"
+          },
+          "passengerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passenger": {
+            "$ref": "#/components/schemas/PassengerShortDto"
+          },
+          "seatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seat": {
+            "$ref": "#/components/schemas/SeatDto"
+          },
+          "bookingStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "calculatedPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "reservedAt": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },

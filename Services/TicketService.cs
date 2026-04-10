@@ -2,6 +2,8 @@ using AirlineAPI.Interfaces.Services;
 using AirlineAPI.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using AirlineAPI.Data;
+using AirlineAPI.Entity;
 
 namespace AirlineAPI.Services
 {

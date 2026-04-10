@@ -31,8 +31,12 @@ namespace AirlineAPI.DTOs
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }
         public int DepartureAirportId { get; set; }
+        public AirportDto? DepartureAirport { get; set; }
         public int ArrivalAirportId { get; set; }
+        public AirportDto? ArrivalAirport { get; set; }
         public int AirplaneId { get; set; }
+        public AirplaneDto? Airplane { get; set; }
+
     }
 
     public class FlightDetailsDto

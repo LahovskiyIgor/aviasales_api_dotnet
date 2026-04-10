@@ -46,8 +46,11 @@ namespace AirlineAPI.Mappers
             DepartureTime = flight.DepartureTime,
             ArrivalTime = flight.ArrivalTime,
             DepartureAirportId = flight.DepartureAirportId,
+            DepartureAirport = flight.DepartureAirport?.ToDto(),
             ArrivalAirportId = flight.ArrivalAirportId,
-            AirplaneId = flight.AirplaneId
+            ArrivalAirport = flight.ArrivalAirport?.ToDto(),
+            AirplaneId = flight.AirplaneId,
+            Airplane = flight.Airplane?.ToDto()
         };
 
         public static FlightDto ToDto(this Flight flight) => new()
