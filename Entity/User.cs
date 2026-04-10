@@ -1,4 +1,6 @@
-﻿namespace AirlineAPI.Entity
+﻿using System.Text.Json.Serialization;
+
+namespace AirlineAPI.Entity
 {
     public class User
     {
@@ -8,6 +10,8 @@
         public string Role { get; set; } = null!;
         
         // Связь с пассажиром (один пользователь может иметь одного пассажира)
+        
+        [JsonIgnore]
         public Passenger? Passenger { get; set; }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace AirlineAPI.Entity
+﻿using System.Text.Json.Serialization;
+
+namespace AirlineAPI.Entity
 {
     public class Passenger
     {
@@ -10,8 +12,11 @@
         
         // Внешний ключ на таблицу Users
         public int UserId { get; set; }
+        
+        [JsonIgnore]
         public User? User { get; set; }
 
+        [JsonIgnore]
         public ICollection<Ticket> Tickets { get; set; }
     }
 }
