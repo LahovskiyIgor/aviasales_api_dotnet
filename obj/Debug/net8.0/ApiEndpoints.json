@@ -143,8 +143,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "airport",
-        "Type": "AirlineAPI.Entity.AirportEntity",
+        "Name": "dto",
+        "Type": "AirlineAPI.DTOs.CreateAirportDto",
         "IsRequired": true
       }
     ],
@@ -190,8 +190,8 @@
         "IsRequired": true
       },
       {
-        "Name": "airport",
-        "Type": "AirlineAPI.Entity.AirportEntity",
+        "Name": "dto",
+        "Type": "AirlineAPI.DTOs.UpdateAirportDto",
         "IsRequired": true
       }
     ],
@@ -294,8 +294,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "flight",
-        "Type": "AirlineAPI.Entity.Flight",
+        "Name": "dto",
+        "Type": "AirlineAPI.DTOs.CreateFlightDto",
         "IsRequired": true
       }
     ],
@@ -341,8 +341,8 @@
         "IsRequired": true
       },
       {
-        "Name": "flight",
-        "Type": "AirlineAPI.Entity.Flight",
+        "Name": "dto",
+        "Type": "AirlineAPI.DTOs.UpdateFlightDto",
         "IsRequired": true
       }
     ],
@@ -524,8 +524,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "passenger",
-        "Type": "AirlineAPI.Entity.Passenger",
+        "Name": "passengerDto",
+        "Type": "AirlineAPI.DTOs.UpdatePassengerDto",
         "IsRequired": true
       }
     ],

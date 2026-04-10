@@ -23,6 +23,7 @@ namespace AirlineAPI.Repositories
                     .ThenInclude(f => f.ArrivalAirport)
                 .Include(t => t.Flight)
                     .ThenInclude(f => f.Airplane)
+                .Include(t => t.Passenger)
                 .AsSplitQuery()
                 .ToListAsync();
         

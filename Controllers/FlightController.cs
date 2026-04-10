@@ -4,6 +4,7 @@ using AirlineAPI.Mappers;
 using AirlineAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirlineAPI.Controllers
 {

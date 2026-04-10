@@ -242,17 +242,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/CreateAirportDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/CreateAirportDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/CreateAirportDto"
               }
             }
           }
@@ -322,17 +322,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/UpdateAirportDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/UpdateAirportDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AirportEntity"
+                "$ref": "#/components/schemas/UpdateAirportDto"
               }
             }
           }
@@ -501,17 +501,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/CreateFlightDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/CreateFlightDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/CreateFlightDto"
               }
             }
           }
@@ -581,17 +581,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/UpdateFlightDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/UpdateFlightDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Flight"
+                "$ref": "#/components/schemas/UpdateFlightDto"
               }
             }
           }
@@ -851,17 +851,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Passenger"
+                "$ref": "#/components/schemas/UpdatePassengerDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Passenger"
+                "$ref": "#/components/schemas/UpdatePassengerDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Passenger"
+                "$ref": "#/components/schemas/UpdatePassengerDto"
               }
             }
           }
@@ -1754,6 +1754,58 @@
         },
         "additionalProperties": false
       },
+      "CreateAirportDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateFlightDto": {
+        "type": "object",
+        "properties": {
+          "flightNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "departureAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "arrivalAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departureTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "airplaneId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "DateOnly": {
         "type": "object",
         "properties": {
@@ -2283,6 +2335,84 @@
           "reservedAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateAirportDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateFlightDto": {
+        "type": "object",
+        "properties": {
+          "flightNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "departureAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "arrivalAirportId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departureTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "airplaneId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdatePassengerDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
             "nullable": true
           }
         },
