@@ -1,6 +1,7 @@
 using AirlineAPI.Interfaces.Services;
 using AirlineAPI.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AirlineAPI.Services
 {
@@ -10,13 +11,20 @@ namespace AirlineAPI.Services
         private readonly IFlightRepository _flightRepository;
         private readonly ISeatRepository _seatRepository;
         private readonly AppDbContext _context;
+        private readonly ILogger<TicketService> _logger;
 
-        public TicketService(ITicketRepository repository, IFlightRepository flightRepository, ISeatRepository seatRepository, AppDbContext context)
+        public TicketService(
+            ITicketRepository repository, 
+            IFlightRepository flightRepository, 
+            ISeatRepository seatRepository, 
+            AppDbContext context,
+            ILogger<TicketService> logger)
         {
             _repository = repository;
             _flightRepository = flightRepository;
             _seatRepository = seatRepository;
             _context = context;
+            _logger = logger;
         }
 
         public Task<IEnumerable<Ticket>> GetAllAsync() => _repository.GetAllAsync();

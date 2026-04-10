@@ -25,13 +25,28 @@ const FlightDetailPage = () => {
 
     // Таймер обновления времени бронирования и проверки истечения резервирования
     useEffect(() => {
-        const timer = setInterval(async () => {
+        let isStale = false;
+        
+        const updateAndCheck = async () => {
             await updateReservationTimers();
-            await checkExpiredReservations();
+            if (!isStale) {
+                await checkExpiredReservations();
+            }
+        };
+        
+        updateAndCheck();
+        
+        const timer = setInterval(async () => {
+            if (!isStale) {
+                await updateAndCheck();
+            }
         }, 1000);
 
-        return () => clearInterval(timer);
-    }, [myTickets, reservationTimers]);
+        return () => {
+            isStale = true;
+            clearInterval(timer);
+        };
+    }, [myTickets]);
 
     const updateReservationTimers = async () => {
         const newTimers = {};
@@ -51,7 +66,16 @@ const FlightDetailPage = () => {
             }
         }
 
-        setReservationTimers(newTimers);
+        setReservationTimers(prevTimers => {
+            // Проверяем, изменилось ли что-то действительно
+            const hasChanges = Object.keys(newTimers).some(key => 
+                prevTimers[key] !== newTimers[key]
+            ) || Object.keys(prevTimers).some(key => 
+                newTimers[key] === undefined
+            );
+            
+            return hasChanges ? newTimers : prevTimers;
+        });
     };
 
     const checkExpiredReservations = async () => {
@@ -62,8 +86,24 @@ const FlightDetailPage = () => {
 
         if (expiredTicketIds.length > 0) {
             // Обновляем список билетов, чтобы убрать истёкшие
-            await loadMyTickets();
-            await loadFlightDetails();
+            // Но только если они ещё не были удалены из myTickets
+            const stillHaveExpired = expiredTicketIds.some(id => 
+                myTickets.some(t => t.id === id && t.bookingStatus === 'Зарезервирован')
+            );
+            
+            if (stillHaveExpired) {
+                // Сбрасываем таймеры для истёкших билетов, чтобы избежать повторных запросов
+                setReservationTimers(prev => {
+                    const updated = { ...prev };
+                    expiredTicketIds.forEach(id => {
+                        delete updated[id];
+                    });
+                    return updated;
+                });
+                
+                await loadMyTickets();
+                await loadFlightDetails();
+            }
         }
     };
 
@@ -400,12 +440,14 @@ const FlightDetailPage = () => {
                                             <button
                                                 className="pay-btn"
                                                 onClick={() => handlePay(ticket.id)}
+                                                disabled={reservationTimers[ticket.id] === 'Истекло'}
                                             >
                                                 Оплатить
                                             </button>
                                             <button
                                                 className="cancel-btn"
                                                 onClick={() => handleCancel(ticket.id)}
+                                                disabled={reservationTimers[ticket.id] === 'Истекло'}
                                             >
                                                 Отменить
                                             </button>

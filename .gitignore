@@ -1,72 +1,110 @@
-```
 # Dependencies
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Build artifacts
-frontend/dist/
+# Build outputs
+dist/
+build/
+coverage/
 
 # Environment variables
 .env
 .env.local
-*.env.*
+.env.*
 
 # IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # Logs
 *.log
 
-# OS files
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Temporary files
-*.tmp
-*.swp
-
-# Python cache
+# Python specific
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Virtual environments
+.Python
+env/
 venv/
 .venv/
-env/
-ENV/
-
-# Coverage reports
-coverage/
-htmlcov/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
 .coverage
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-
-# Testing
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/refs/original/
+install_manifest.txt
+.manifest
 .pytest_cache/
 .mypy_cache/
+.hypothesis/
 
-# Node.js
+# Node.js specific
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
-# Browsers
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# C# specific
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+nuget.exe
+MSBuild.exe
+MSBuild.dll
+*.VC.db
+*.VC.VC.opendb
 
-# Compiled CSS/JS
+# Frontend build artifacts
 *.min.js
 *.min.css
+bundle.js
+bundle.css
+public/build/
 
-# Vite specific
-!.vite/
-vite.config.js.timestamp-*.mjs
+# Temporary files
+*.tmp
+*.temp
+*~
 
-```
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
