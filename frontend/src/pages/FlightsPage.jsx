@@ -37,11 +37,10 @@ const FlightsPage = () => {
     }
   };
 
-  // Подсчитывает количество проданных и забронированных билетов на основе данных о билетах
+  // Использует готовые значения проданных и забронированных билетов из DTO
   const getTicketStats = (flight) => {
-    const tickets = flight.tickets || [];
-    const soldTickets = tickets.filter(t => t.bookingStatus === 'Оплачен').length;
-    const reservedTickets = tickets.filter(t => t.bookingStatus === 'Зарезервирован').length;
+    const soldTickets = flight.soldTickets || 0;
+    const reservedTickets = flight.reservedTickets || 0;
     return { soldTickets, reservedTickets };
   };
 
