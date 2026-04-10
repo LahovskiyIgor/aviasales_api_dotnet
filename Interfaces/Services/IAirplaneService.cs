@@ -15,6 +15,7 @@ namespace AirlineAPI.Services
         Task<Airplane> GetAirplaneWithFlightsAsync(int airplaneId);
 
         Task AddAsync(Airplane airplane);
+        Task AddWithSeatsAsync(Airplane airplane);
         Task UpdateAsync(Airplane airplane);
         Task DeleteAsync(int id);
     }

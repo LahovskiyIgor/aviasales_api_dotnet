@@ -25,6 +25,7 @@ namespace AirlineAPI.Services
         
 
         public Task AddAsync(Airplane airplane) => _repository.AddAsync(airplane);
+        public Task AddWithSeatsAsync(Airplane airplane) => _repository.AddWithSeatsAsync(airplane);
         public Task UpdateAsync(Airplane airplane) => _repository.UpdateAsync(airplane);
         public Task DeleteAsync(int id) => _repository.DeleteAsync(id);
     }
