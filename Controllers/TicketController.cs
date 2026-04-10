@@ -57,7 +57,7 @@ namespace AirlineAPI.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetMyTickets()
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var allTickets = await _service.GetAllAsync();
+            var allTickets = await _service.GetAllWithDetailsAsync();
             var myTickets = allTickets.Where(t => t.PassengerId == passengerId);
             
             return Ok(myTickets);

@@ -15,6 +15,8 @@ namespace AirlineAPI.Repositories
             .Include(f => f.DepartureAirport)
             .Include(f => f.ArrivalAirport)
             .Include(f => f.Airplane)
+            .Include(f => f.Tickets)
+                .ThenInclude(t => t.Seat)
             .ToListAsync();
         public async Task<Flight> GetByIdAsync(int id) =>
             await _context.Flights

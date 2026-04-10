@@ -19,6 +19,7 @@ namespace AirlineAPI.Services
         }
 
         public Task<IEnumerable<Ticket>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<IEnumerable<Ticket>> GetAllWithDetailsAsync() => _repository.GetAllWithDetailsAsync();
         public Task<Ticket> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
         public Task AddAsync(Ticket ticket) => _repository.AddAsync(ticket);
         public Task UpdateAsync(Ticket ticket) => _repository.UpdateAsync(ticket);
