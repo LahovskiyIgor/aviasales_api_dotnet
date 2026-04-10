@@ -1,5 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import flightService from '../services/flightService';
 import ticketService from '../services/ticketService';
 import './FlightDetailPage.css';
@@ -226,7 +228,10 @@ const FlightDetailPage = () => {
     const availableSeatsCount = seats.length - occupiedSeatIds.size;
 
     return (
-        <div className="flight-detail-page">
+        <div className="flights-detail-page-wrapper"> 
+            <Header activePage="flight-detail-page" />
+
+            <div className="flight-detail-page">
             <button className="back-button" onClick={() => navigate('/flights')}>
                 ← Назад к списку рейсов
             </button>
@@ -468,6 +473,10 @@ const FlightDetailPage = () => {
                     </div>
                 </div>
             )}
+            </div>
+
+            <Footer />
+
         </div>
     );
 };

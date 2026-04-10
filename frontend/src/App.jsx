@@ -8,6 +8,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import SuccessPage from './pages/SuccessPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminFlightsPage from './pages/AdminFlightsPage';
+import AdminRoute from './components/AdminRoute';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -23,13 +24,11 @@ const ProtectedRoute = ({ children }) => {
 
 // Компонент для перенаправления авторизованных пользователей
 const PublicRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading } = useAuth();
+    if (loading) return <div>Загрузка...</div>;
 
-  if (loading) {
-    return <div className="loading">Загрузка...</div>;
-  }
-
-  return !isAuthenticated ? children : <Navigate to="/flights" />;
+    // Редирект на корень, чтобы сработал RoleBasedRoute
+    return !isAuthenticated ? children : <Navigate to="/" replace />;
 };
 
 // Компонент для маршрутизации на основе роли
@@ -117,9 +116,9 @@ function AppRoutes() {
           <Route
               path="/admin/flights"
               element={
-                  <ProtectedRoute>
+                  <AdminRoute>
                       <AdminFlightsPage />
-                  </ProtectedRoute>
+                  </AdminRoute>
               }
           />
       <Route path="*" element={<Navigate to="/login" />} />

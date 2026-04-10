@@ -11,7 +11,7 @@ const Footer = () => {
                     <a href="#" className="footer-link">Контакты</a>
                 </div>
                 <div className="footer-copyright">
-                    © 2024 AirlineAPI. Все права защищены.
+                    © 2026 AirlineAPI. Все права защищены.
                 </div>
             </div>
         </footer>
