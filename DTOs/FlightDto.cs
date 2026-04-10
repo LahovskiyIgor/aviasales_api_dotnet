@@ -24,6 +24,30 @@ namespace AirlineAPI.DTOs
         public decimal BasePrice { get; set; }
     }
 
+    public class CreateFlightDto
+    {
+        public string FlightNumber { get; set; } = null!;
+        public int DepartureAirportId { get; set; }
+        public int ArrivalAirportId { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public DateTime ArrivalTime { get; set; }
+        public int AirplaneId { get; set; }
+        public int TotalSeats { get; set; }
+        public decimal BasePrice { get; set; }
+    }
+
+    public class UpdateFlightDto
+    {
+        public string FlightNumber { get; set; } = null!;
+        public int DepartureAirportId { get; set; }
+        public int ArrivalAirportId { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public DateTime ArrivalTime { get; set; }
+        public int AirplaneId { get; set; }
+        public int TotalSeats { get; set; }
+        public decimal BasePrice { get; set; }
+    }
+
     public class FlightShortDto
     {
         public int Id { get; set; }

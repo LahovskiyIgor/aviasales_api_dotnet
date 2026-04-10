@@ -46,18 +46,40 @@ namespace AirlineAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Flight flight)
+        public async Task<IActionResult> Create([FromBody] CreateFlightDto dto)
         {
+            var flight = new Flight
+            {
+                FlightNumber = dto.FlightNumber,
+                DepartureAirportId = dto.DepartureAirportId,
+                ArrivalAirportId = dto.ArrivalAirportId,
+                DepartureTime = dto.DepartureTime,
+                ArrivalTime = dto.ArrivalTime,
+                AirplaneId = dto.AirplaneId,
+                TotalSeats = dto.TotalSeats,
+                BasePrice = dto.BasePrice
+            };
             await _service.AddAsync(flight);
             return CreatedAtAction(nameof(GetById), new { id = flight.Id }, flight.ToDto());
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Flight flight)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateFlightDto dto)
         {
-            if (id != flight.Id) return BadRequest();
-            await _service.UpdateAsync(flight);
+            var existing = await _service.GetByIdAsync(id);
+            if (existing == null) return NotFound();
+
+            existing.FlightNumber = dto.FlightNumber;
+            existing.DepartureAirportId = dto.DepartureAirportId;
+            existing.ArrivalAirportId = dto.ArrivalAirportId;
+            existing.DepartureTime = dto.DepartureTime;
+            existing.ArrivalTime = dto.ArrivalTime;
+            existing.AirplaneId = dto.AirplaneId;
+            existing.TotalSeats = dto.TotalSeats;
+            existing.BasePrice = dto.BasePrice;
+
+            await _service.UpdateAsync(existing);
             return NoContent();
         }
 
@@ -65,8 +87,15 @@ namespace AirlineAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _service.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(409, "Невозможно удалить рейс: он имеет связанные билеты.");
+            }
         }
     }
 }

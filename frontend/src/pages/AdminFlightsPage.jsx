@@ -21,7 +21,8 @@ const AdminFlightsPage = () => {
     departureTime: '',
     arrivalTime: '',
     airplaneId: '',
-    totalSeats: 0
+    totalSeats: 0,
+    basePrice: 100
   });
 
   useEffect(() => {
@@ -64,7 +65,8 @@ const AdminFlightsPage = () => {
       departureTime: new Date(flight.departureTime).toISOString().slice(0, 16),
       arrivalTime: new Date(flight.arrivalTime).toISOString().slice(0, 16),
       airplaneId: flight.airplane?.id || '',
-      totalSeats: flight.totalSeats
+      totalSeats: flight.totalSeats,
+      basePrice: flight.basePrice || 100
     });
     setShowModal(true);
   };
@@ -78,7 +80,8 @@ const AdminFlightsPage = () => {
       departureTime: '',
       arrivalTime: '',
       airplaneId: '',
-      totalSeats: 0
+      totalSeats: 0,
+      basePrice: 100
     });
     setShowModal(true);
   };
@@ -87,12 +90,14 @@ const AdminFlightsPage = () => {
     e.preventDefault();
 
     const payload = {
-      ...formData,
-      id: editingFlight?.id,
+      flightNumber: formData.flightNumber,
       departureAirportId: parseInt(formData.departureAirportId),
       arrivalAirportId: parseInt(formData.arrivalAirportId),
+      departureTime: formData.departureTime,
+      arrivalTime: formData.arrivalTime,
       airplaneId: parseInt(formData.airplaneId),
-      totalSeats: parseInt(formData.totalSeats)
+      totalSeats: parseInt(formData.totalSeats),
+      basePrice: parseFloat(formData.basePrice) || 0
     };
 
     try {
@@ -263,6 +268,16 @@ const AdminFlightsPage = () => {
                   type="number"
                   name="totalSeats"
                   value={formData.totalSeats}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Базовая цена:</label>
+                <input
+                  type="number"
+                  name="basePrice"
+                  value={formData.basePrice}
                   onChange={handleChange}
                   required
                 />
