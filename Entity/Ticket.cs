@@ -14,5 +14,7 @@
         public Seat Seat { get; set; }
 
         public string BookingStatus { get; set; } = "Оплачен"; // Значение по умолчанию: Зарезервирован, Оплачен, Отменен
+        
+        public DateTime? ReservedAt { get; set; }
     }
 }

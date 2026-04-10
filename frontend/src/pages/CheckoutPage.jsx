@@ -125,6 +125,34 @@ const CheckoutPage = () => {
     }
 
     const calculatedPrice = ticket.calculatedPrice || (ticket.flight?.basePrice * ticket.seat?.priceMultiplier) || 0;
+    
+    // Расчет оставшегося времени для таймера
+    const getRemainingTime = () => {
+        if (ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) return null;
+        
+        const now = new Date().getTime();
+        const reservedAt = new Date(ticket.reservedAt).getTime();
+        const elapsed = Math.floor((now - reservedAt) / 1000);
+        const remaining = Math.max(0, 600 - elapsed);
+        
+        if (remaining <= 0) return 'Истекло';
+        
+        const minutes = Math.floor(remaining / 60);
+        const seconds = remaining % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    };
+    
+    const [reservationTimeLeft, setReservationTimeLeft] = useState(getRemainingTime());
+    
+    useEffect(() => {
+        if (ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) return;
+        
+        const timer = setInterval(() => {
+            setReservationTimeLeft(getRemainingTime());
+        }, 1000);
+        
+        return () => clearInterval(timer);
+    }, [ticket]);
 
     return (
         <div className="checkout-page">
@@ -171,6 +199,14 @@ const CheckoutPage = () => {
                             <span className="label">Класс:</span>
                             <span className="value">{ticket.seat?.sector || 'N/A'}</span>
                         </div>
+                        {ticket.bookingStatus === 'Зарезервирован' && reservationTimeLeft && (
+                            <div className="summary-row">
+                                <span className="label">⏱️ Время на оплату:</span>
+                                <span className={`value ${reservationTimeLeft === 'Истекло' ? 'time-expired' : 'time-remaining'}`}>
+                                    {reservationTimeLeft}
+                                </span>
+                            </div>
+                        )}
                         <div className="summary-row total">
                             <span className="label">К оплате:</span>
                             <span className="value price">{calculatedPrice} ₽</span>
