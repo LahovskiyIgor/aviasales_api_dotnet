@@ -6,6 +6,7 @@ import FlightsPage from './pages/FlightsPage';
 import FlightDetailPage from './pages/FlightDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SuccessPage from './pages/SuccessPage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
 // Компонент для защиты маршрутов
@@ -78,6 +79,14 @@ function AppRoutes() {
               element={
                   <ProtectedRoute>
                       <SuccessPage />
+                  </ProtectedRoute>
+              }
+          />
+          <Route
+              path="/profile"
+              element={
+                  <ProtectedRoute>
+                      <ProfilePage />
                   </ProtectedRoute>
               }
           />
