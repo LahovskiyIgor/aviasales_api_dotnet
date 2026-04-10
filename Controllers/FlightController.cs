@@ -1,16 +1,8 @@
-﻿using AirlineAPI.Entity;
+﻿using AirlineAPI.DTOs;
+using AirlineAPI.Mappers;
 using AirlineAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirlineAPI.Controllers
 {
@@ -26,16 +18,19 @@ namespace AirlineAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Flight>>> GetAll() =>
-            Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<FlightDto>>> GetAll()
+        {
+            var flights = await _service.GetAllAsync();
+            return Ok(flights.Select(f => f.ToDto()));
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Flight>> GetById(int id)
+        public async Task<ActionResult<FlightDto>> GetById(int id)
         {
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
                 return NotFound();
-            else return Ok(entity);
+            return Ok(entity.ToDto());
         }
 
         [HttpGet("{id}/details")]
@@ -45,7 +40,7 @@ namespace AirlineAPI.Controllers
             if (flight == null)
                 return NotFound();
 
-            return Ok(flight);
+            return Ok(flight.ToDetailsDto());
         }
 
         [Authorize(Roles = "Admin")]
@@ -53,7 +48,7 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> Create([FromBody] Flight flight)
         {
             await _service.AddAsync(flight);
-            return CreatedAtAction(nameof(GetById), new { id = flight.Id }, flight);
+            return CreatedAtAction(nameof(GetById), new { id = flight.Id }, flight.ToDto());
         }
 
         [Authorize(Roles = "Admin")]
@@ -73,5 +68,4 @@ namespace AirlineAPI.Controllers
             return NoContent();
         }
     }
-
 }

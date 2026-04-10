@@ -1,17 +1,8 @@
-﻿using AirlineAPI.Entity;
+﻿using AirlineAPI.DTOs;
+using AirlineAPI.Mappers;
 using AirlineAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirlineAPI.Controllers
 {
@@ -28,16 +19,19 @@ namespace AirlineAPI.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Airplane>>> GetAll() =>
-            Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<AirplaneDto>>> GetAll()
+        {
+            var airplanes = await _service.GetAllAsync();
+            return Ok(airplanes.Select(a => a.ToDto()));
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Airplane>> GetById(int id)
+        public async Task<ActionResult<AirplaneDto>> GetById(int id)
         {
             var entity = await _service.GetByIdAsync(id);
             if (entity == null) 
                 return NotFound(); 
-            else return Ok(entity);
+            return Ok(entity.ToDto());
         }
 
         [HttpGet("{id}/flights")]
@@ -47,7 +41,7 @@ namespace AirlineAPI.Controllers
             if (airplane == null)
                 return NotFound($"Самолёт с ID {id} не найден");
 
-            return Ok(airplane);
+            return Ok(airplane.ToWithFlightsDto());
         }
 
         [Authorize(Roles = "Admin")]
@@ -55,7 +49,7 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> Create([FromBody] Airplane airplane)
         {
             await _service.AddAsync(airplane);
-            return CreatedAtAction(nameof(GetById), new { id = airplane.Id }, airplane);
+            return CreatedAtAction(nameof(GetById), new { id = airplane.Id }, airplane.ToDto());
         }
 
         [Authorize(Roles = "Admin")]
@@ -66,7 +60,7 @@ namespace AirlineAPI.Controllers
             if (existing == null)
                 return NotFound();
 
-            airplane.Id = id; // Убедимся, что ID не меняется
+            airplane.Id = id;
             await _service.UpdateAsync(airplane);
             return NoContent();
         }
@@ -83,5 +77,4 @@ namespace AirlineAPI.Controllers
             return NoContent();
         }
     }
-
 }

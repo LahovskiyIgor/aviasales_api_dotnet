@@ -1,16 +1,9 @@
-﻿using AirlineAPI.Entity;
+﻿using AirlineAPI.DTOs;
+using AirlineAPI.Entity;
+using AirlineAPI.Mappers;
 using AirlineAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
@@ -28,17 +21,20 @@ namespace AirlineAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Passenger>>> GetAll() =>
-            Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<PassengerDto>>> GetAll()
+        {
+            var passengers = await _service.GetAllAsync();
+            return Ok(passengers.Select(p => p.ToDto()));
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Passenger>> GetById(int id)
+        public async Task<ActionResult<PassengerDto>> GetById(int id)
         {
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
                 return NotFound();
-            else return Ok(entity);
+            return Ok(entity.ToDto());
         }
 
         /// <summary>
@@ -46,18 +42,17 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("my")]
-        public async Task<ActionResult<Passenger>> GetMyProfile()
+        public async Task<ActionResult<PassengerDto>> GetMyProfile()
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
-            // Получаем пассажира по UserId (связь User -> Passenger)
             var passengers = await _service.GetAllAsync();
             var passenger = passengers.FirstOrDefault(p => p.UserId == userId);
             
             if (passenger == null)
                 return NotFound(new { message = "Профиль пассажира не найден" });
             
-            return Ok(passenger);
+            return Ok(passenger.ToDto());
         }
 
         /// <summary>
@@ -69,7 +64,6 @@ namespace AirlineAPI.Controllers
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             
-            // Находим пассажира текущего пользователя
             var existingPassengers = await _service.GetAllAsync();
             var existingPassenger = existingPassengers.FirstOrDefault(p => p.UserId == userId);
             
@@ -79,7 +73,6 @@ namespace AirlineAPI.Controllers
             if (passenger.Id != existingPassenger.Id) 
                 return BadRequest(new { message = "Нельзя обновить профиль другого пользователя" });
             
-            // Обновляем только разрешённые поля
             existingPassenger.FirstName = passenger.FirstName;
             existingPassenger.LastName = passenger.LastName;
             existingPassenger.Email = passenger.Email;
@@ -97,7 +90,7 @@ namespace AirlineAPI.Controllers
             if (passenger == null)
                 return NotFound();
 
-            return Ok(passenger);
+            return Ok(passenger.ToDetailsDto());
         }
 
         [Authorize(Roles = "Admin,Passanger")]
@@ -105,7 +98,7 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> Create([FromBody] Passenger passenger)
         {
             await _service.AddAsync(passenger);
-            return CreatedAtAction(nameof(GetById), new { id = passenger.Id }, passenger);
+            return CreatedAtAction(nameof(GetById), new { id = passenger.Id }, passenger.ToDto());
         }
 
         [Authorize(Roles = "Admin,Passanger")]
@@ -125,5 +118,4 @@ namespace AirlineAPI.Controllers
             return NoContent();
         }
     }
-
 }

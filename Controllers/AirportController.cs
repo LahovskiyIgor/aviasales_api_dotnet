@@ -1,16 +1,8 @@
-﻿using AirlineAPI.Entity;
+﻿using AirlineAPI.DTOs;
+using AirlineAPI.Mappers;
 using AirlineAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirlineAPI.Controllers
 {
@@ -27,17 +19,18 @@ namespace AirlineAPI.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AirportEntity>>> GetAll()
+        public async Task<ActionResult<IEnumerable<AirportDto>>> GetAll()
         {
-            return Ok(await _service.GetAllAsync());
+            var airports = await _service.GetAllAsync();
+            return Ok(airports.Select(a => a.ToDto()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AirportEntity>> GetById(int id)
+        public async Task<ActionResult<AirportDto>> GetById(int id)
         {
             var entity = await _service.GetByIdAsync(id);
             if (entity == null) return NotFound();
-            return Ok(entity);
+            return Ok(entity.ToDto());
         }
 
         [Authorize(Roles = "Admin")]
@@ -45,7 +38,7 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> Create([FromBody] AirportEntity airport)
         {
             await _service.AddAsync(airport);
-            return CreatedAtAction(nameof(GetById), new { id = airport.Id }, airport);
+            return CreatedAtAction(nameof(GetById), new { id = airport.Id }, airport.ToDto());
         }
 
         [Authorize(Roles = "Admin")]

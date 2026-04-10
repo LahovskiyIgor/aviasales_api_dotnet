@@ -1,9 +1,10 @@
+using AirlineAPI.DTOs;
 using AirlineAPI.Entity;
+using AirlineAPI.Mappers;
 using AirlineAPI.Services;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using AirlineAPI.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AirlineAPI.Controllers
 {
@@ -20,17 +21,20 @@ namespace AirlineAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetAll() =>
-            Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<TicketDto>>> GetAll()
+        {
+            var tickets = await _service.GetAllAsync();
+            return Ok(tickets.Select(t => t.ToDto()));
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetById(int id)
+        public async Task<ActionResult<TicketDto>> GetById(int id)
         {
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
                 return NotFound();
-            else return Ok(entity);
+            return Ok(entity.ToDto());
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("my/{id}")]
-        public async Task<ActionResult<Ticket>> GetMyTicketById(int id)
+        public async Task<ActionResult<TicketDto>> GetMyTicketById(int id)
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             var ticket = await _service.GetByPassengerAndIdAsync(id, passengerId);
@@ -46,7 +50,7 @@ namespace AirlineAPI.Controllers
             if (ticket == null)
                 return NotFound(new { message = "Билет не найден или не принадлежит вам" });
             
-            return Ok(ticket);
+            return Ok(ticket.ToDto());
         }
 
         /// <summary>
@@ -54,13 +58,13 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("my")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetMyTickets()
+        public async Task<ActionResult<IEnumerable<TicketDto>>> GetMyTickets()
         {
             var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
             var allTickets = await _service.GetAllWithDetailsAsync();
             var myTickets = allTickets.Where(t => t.PassengerId == passengerId);
             
-            return Ok(myTickets);
+            return Ok(myTickets.Select(t => t.ToDto()));
         }
 
         /// <summary>
@@ -68,12 +72,12 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("flight/{flightId}/occupied-seats")]
-        public async Task<ActionResult<IEnumerable<Seat>>> GetOccupiedSeats(int flightId)
+        public async Task<ActionResult<IEnumerable<SeatDto>>> GetOccupiedSeats(int flightId)
         {
             try
             {
                 var seats = await _service.GetOccupiedSeatsAsync(flightId);
-                return Ok(seats);
+                return Ok(seats.Select(s => s.ToDto()));
             }
             catch (ArgumentException ex)
             {
@@ -86,12 +90,12 @@ namespace AirlineAPI.Controllers
         /// </summary>
         [Authorize]
         [HttpGet("flight/{flightId}/available-seats")]
-        public async Task<ActionResult<IEnumerable<Seat>>> GetAvailableSeats(int flightId)
+        public async Task<ActionResult<IEnumerable<SeatDto>>> GetAvailableSeats(int flightId)
         {
             try
             {
                 var seats = await _service.GetAvailableSeatsAsync(flightId);
-                return Ok(seats);
+                return Ok(seats.Select(s => s.ToDto()));
             }
             catch (ArgumentException ex)
             {
@@ -107,7 +111,7 @@ namespace AirlineAPI.Controllers
             {
                 var passengerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
                 var ticket = await _service.ReserveTicketAsync(request.FlightId, passengerId, request.SeatId);
-                return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+                return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket.ToDto());
             }
             catch (ArgumentException ex)
             {
@@ -144,7 +148,7 @@ namespace AirlineAPI.Controllers
         public async Task<IActionResult> Create([FromBody] Ticket ticket)
         {
             await _service.AddAsync(ticket);
-            return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
+            return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket.ToDto());
         }
 
         [Authorize(Roles = "Admin")]
