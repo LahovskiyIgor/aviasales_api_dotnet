@@ -62,9 +62,9 @@ namespace AirlineAPI.Mappers
             ArrivalTime = flight.ArrivalTime,
             AirplaneId = flight.AirplaneId,
             Airplane = flight.Airplane?.ToDto(),
-            TotalSeats = flight.Airplane?.Seats?.Count ?? 0,
-            SoldTickets = flight.Tickets?.Count(t => t.BookingStatus == "Оплачен") ?? 0,
-            ReservedTickets = flight.Tickets?.Count(t => t.BookingStatus == "Зарезервирован") ?? 0,
+            TotalSeats = flight.Airplane?.Capacity ?? 0,
+            SoldTickets = 0,
+            ReservedTickets = 0,
             BasePrice = flight.BasePrice
         };
 

@@ -6,11 +6,11 @@ obj/
 *.exe
 *.pdb
 *.config
+*.manifest
 
 # Dependencies
 packages/
 node_modules/
-vendor/
 
 # Logs
 *.log
@@ -18,7 +18,7 @@ vendor/
 # Environment
 .env
 .env.local
-*.env
+*.env.*
 
 # Editors
 .vscode/
