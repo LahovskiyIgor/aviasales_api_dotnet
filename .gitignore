@@ -1,1 +1,43 @@
-(frontend/src/pages/CheckoutPage.jsx is a source file, and there are no build artifacts, dependencies, or temporary files in the changes)
+```
+# Compiled and build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+obj/
+
+# Dependencies
+packages/
+bin/
+obj/
+*.userprefs
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.suo
+*.csproj.user
+
+# Build outputs
+Debug/
+Release/
+x64/
+x86/
+build/
+dist/
+```

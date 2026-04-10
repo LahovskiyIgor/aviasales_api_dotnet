@@ -22,7 +22,14 @@ namespace AirlineAPI.Repositories
                 .ToListAsync();
         
         public async Task<Ticket> GetByIdAsync(int id) => 
-            await _context.Tickets.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+            await _context.Tickets
+                .Include(t => t.Seat)
+                .Include(t => t.Passenger)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.DepartureAirport)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.ArrivalAirport)
+                .FirstOrDefaultAsync(a => a.Id == id);
         
         public async Task AddAsync(Ticket ticket) { _context.Tickets.Add(ticket); await _context.SaveChangesAsync(); }
         public async Task UpdateAsync(Ticket ticket) { _context.Tickets.Update(ticket); await _context.SaveChangesAsync(); }
