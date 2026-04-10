@@ -15,6 +15,7 @@ namespace AirlineAPI.Repositories
             .Include(f => f.DepartureAirport)
             .Include(f => f.ArrivalAirport)
             .Include(f => f.Airplane)
+                .ThenInclude(a => a.Seats)
             .Include(f => f.Tickets)
                 .ThenInclude(t => t.Seat)
             .ToListAsync();
