@@ -7,6 +7,8 @@ const CheckoutPage = () => {
     const { ticketId } = useParams();
     const navigate = useNavigate();
     
+    // Все хуки должны быть в начале компонента, до любых условных возвратов
+    
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(false);
     const [processing, setProcessing] = useState(false);
@@ -17,10 +19,39 @@ const CheckoutPage = () => {
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
     const [cardHolder, setCardHolder] = useState('');
+    const [reservationTimeLeft, setReservationTimeLeft] = useState(null);
 
     useEffect(() => {
         loadTicketInfo();
     }, [ticketId]);
+
+    useEffect(() => {
+        if (!ticket || ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) {
+            setReservationTimeLeft(null);
+            return;
+        }
+        
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const reservedAt = new Date(ticket.reservedAt).getTime();
+            const elapsed = Math.floor((now - reservedAt) / 1000);
+            const remaining = Math.max(0, 600 - elapsed);
+            
+            if (remaining <= 0) {
+                setReservationTimeLeft('Истекло');
+            } else {
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                setReservationTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+            }
+        };
+        
+        updateTimer();
+        
+        const timer = setInterval(updateTimer, 1000);
+        
+        return () => clearInterval(timer);
+    }, [ticket]);
 
     const loadTicketInfo = async () => {
         try {
@@ -125,34 +156,6 @@ const CheckoutPage = () => {
     }
 
     const calculatedPrice = ticket.calculatedPrice || (ticket.flight?.basePrice * ticket.seat?.priceMultiplier) || 0;
-    
-    // Расчет оставшегося времени для таймера
-    const getRemainingTime = () => {
-        if (ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) return null;
-        
-        const now = new Date().getTime();
-        const reservedAt = new Date(ticket.reservedAt).getTime();
-        const elapsed = Math.floor((now - reservedAt) / 1000);
-        const remaining = Math.max(0, 600 - elapsed);
-        
-        if (remaining <= 0) return 'Истекло';
-        
-        const minutes = Math.floor(remaining / 60);
-        const seconds = remaining % 60;
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    };
-    
-    const [reservationTimeLeft, setReservationTimeLeft] = useState(getRemainingTime());
-    
-    useEffect(() => {
-        if (ticket.bookingStatus !== 'Зарезервирован' || !ticket.reservedAt) return;
-        
-        const timer = setInterval(() => {
-            setReservationTimeLeft(getRemainingTime());
-        }, 1000);
-        
-        return () => clearInterval(timer);
-    }, [ticket]);
 
     return (
         <div className="checkout-page">
