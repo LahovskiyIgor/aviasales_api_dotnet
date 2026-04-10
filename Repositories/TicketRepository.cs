@@ -18,6 +18,11 @@ namespace AirlineAPI.Repositories
             await _context.Tickets
                 .Include(t => t.Seat)
                 .Include(t => t.Flight)
+                    .ThenInclude(f => f.DepartureAirport)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.ArrivalAirport)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.Airplane)
                 .AsSplitQuery()
                 .ToListAsync();
         
@@ -29,6 +34,10 @@ namespace AirlineAPI.Repositories
                     .ThenInclude(f => f.DepartureAirport)
                 .Include(t => t.Flight)
                     .ThenInclude(f => f.ArrivalAirport)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.Airplane)
+                .Include(t => t.Passenger)
+                    .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(a => a.Id == id);
         
         public async Task AddAsync(Ticket ticket) { _context.Tickets.Add(ticket); await _context.SaveChangesAsync(); }
