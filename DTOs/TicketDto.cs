@@ -14,6 +14,8 @@ namespace AirlineAPI.DTOs
         public SeatDto? Seat { get; set; }
 
         public string BookingStatus { get; set; } = "Оплачен";
+
+        public decimal CalculatedPrice { get; set; }
     }
 
     public class TicketShortDto
@@ -23,6 +25,7 @@ namespace AirlineAPI.DTOs
         public int PassengerId { get; set; }
         public int SeatId { get; set; }
         public string BookingStatus { get; set; } = "Оплачен";
+        public decimal CalculatedPrice { get; set; }
     }
 
     public class TicketDetailsDto
@@ -39,5 +42,7 @@ namespace AirlineAPI.DTOs
         public SeatDto? Seat { get; set; }
 
         public string BookingStatus { get; set; } = "Оплачен";
+
+        public decimal CalculatedPrice { get; set; }
     }
 }

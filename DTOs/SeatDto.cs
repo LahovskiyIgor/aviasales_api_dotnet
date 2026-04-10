@@ -6,6 +6,7 @@ namespace AirlineAPI.DTOs
         public int AirplaneId { get; set; }
         public string SeatNumber { get; set; } = null!;
         public string Sector { get; set; } = null!;
+        public decimal PriceMultiplier { get; set; }
     }
 
     public class SeatWithTicketsDto
@@ -14,6 +15,7 @@ namespace AirlineAPI.DTOs
         public int AirplaneId { get; set; }
         public string SeatNumber { get; set; } = null!;
         public string Sector { get; set; } = null!;
+        public decimal PriceMultiplier { get; set; }
         public List<TicketShortDto> Tickets { get; set; } = new();
     }
 }

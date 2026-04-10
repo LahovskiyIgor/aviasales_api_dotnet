@@ -260,6 +260,7 @@ const FlightDetailPage = () => {
                         {seats.map((seat, index) => {
                             const isOccupied = isSeatOccupied(seat.id);
                             const isSelected = selectedSeatId === seat.id;
+                            const calculatedPrice = flight.basePrice * seat.priceMultiplier;
 
                             let className = 'seat';
                             if (isOccupied) {
@@ -282,6 +283,7 @@ const FlightDetailPage = () => {
                                         >
                                             <span className="seat-number">{seat.seatNumber}</span>
                                             <span className="seat-sector">{seat.sector.substring(0, 3)}</span>
+                                            <span className="seat-price">{calculatedPrice} ₽</span>
                                         </div>
                                     </>
                                 );
@@ -295,6 +297,7 @@ const FlightDetailPage = () => {
                                 >
                                     <span className="seat-number">{seat.seatNumber}</span>
                                     <span className="seat-sector">{seat.sector.substring(0, 3)}</span>
+                                    <span className="seat-price">{calculatedPrice} ₽</span>
                                 </div>
                             );
                         })}
@@ -302,6 +305,17 @@ const FlightDetailPage = () => {
                 </div>
 
                 <div className="seat-actions">
+                    {selectedSeatId && (
+                        <div className="selected-seat-info">
+                            <span>
+                                Выбрано место: {seats.find(s => s.id === selectedSeatId)?.seatNumber} 
+                                ({seats.find(s => s.id === selectedSeatId)?.sector})
+                            </span>
+                            <span className="selected-price">
+                                Цена: {flight.basePrice * seats.find(s => s.id === selectedSeatId)?.priceMultiplier} ₽
+                            </span>
+                        </div>
+                    )}
                     <button
                         className="reserve-btn"
                         onClick={handleReserve}

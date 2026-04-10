@@ -5,37 +5,32 @@ obj/
 *.dll
 *.exe
 *.pdb
-*.so
-*.dylib
-*.class
+*.nupkg
+*.snupkg
 
 # Dependencies
 packages/
 node_modules/
-vendor/
 
 # Logs
 *.log
 
-# Environment
+# Environment specific
 .env
 .env.local
-*.env.*
+*.userprefs
 
-# Editors
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Testing
 TestResults/
-
-# NuGet
-*.nupkg
-.nuget/
+coverage/
 ```

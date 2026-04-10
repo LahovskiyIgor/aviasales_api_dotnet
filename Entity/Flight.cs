@@ -21,6 +21,8 @@
         public int SoldTickets { get; set; }
         public int ReservedTickets { get; set; }
 
+        public decimal BasePrice { get; set; }
+
         public ICollection<Ticket> Tickets { get; set; }
     }
 }

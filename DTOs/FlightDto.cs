@@ -20,6 +20,8 @@ namespace AirlineAPI.DTOs
         public int TotalSeats { get; set; }
         public int SoldTickets { get; set; }
         public int ReservedTickets { get; set; }
+
+        public decimal BasePrice { get; set; }
     }
 
     public class FlightShortDto
@@ -53,6 +55,8 @@ namespace AirlineAPI.DTOs
         public int TotalSeats { get; set; }
         public int SoldTickets { get; set; }
         public int ReservedTickets { get; set; }
+
+        public decimal BasePrice { get; set; }
 
         public List<TicketShortDto> Tickets { get; set; } = new();
         public List<SeatDto> Seats { get; set; } = new();
