@@ -55,5 +55,6 @@ namespace AirlineAPI.DTOs
         public int ReservedTickets { get; set; }
 
         public List<TicketShortDto> Tickets { get; set; } = new();
+        public List<SeatDto> Seats { get; set; } = new();
     }
 }
